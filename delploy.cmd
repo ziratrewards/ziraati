@@ -34,22 +34,30 @@ if not exist angular.json (
     exit /b 1
 )
 
-echo [1/8] Checking GitHub login...
+echo [1/9] Checking GitHub login...
+
 gh auth status >nul 2>&1
+
 if errorlevel 1 (
     echo GitHub login required.
     gh auth login
-    if errorlevel 1 exit /b 1
+
+    if errorlevel 1 (
+        echo [ERROR] GitHub login failed.
+        pause
+        exit /b 1
+    )
 )
 
 echo.
-echo [2/8] Getting GitHub username...
+echo [2/9] Getting GitHub username...
+
 for /f "delims=" %%A in ('gh api user --jq ".login"') do set USERNAME=%%A
 
 echo GitHub User: !USERNAME!
 
 echo.
-set /p REPONAME=Enter new GitHub repository name: 
+set /p REPONAME=Enter GitHub repository name: 
 
 if "!REPONAME!"=="" (
     echo [ERROR] Repository name cannot be empty.
@@ -57,8 +65,58 @@ if "!REPONAME!"=="" (
     exit /b 1
 )
 
+set "REPO=!USERNAME!/!REPONAME!"
+set "REMOTE=https://github.com/!USERNAME!/!REPONAME!.git"
+
 echo.
-echo [3/8] Creating .gitignore...
+echo Repository:
+echo !REPO!
+
+echo.
+echo [3/9] Checking repository...
+
+gh repo view "!REPO!" >nul 2>&1
+
+if errorlevel 1 (
+    echo Repository does not exist.
+    echo Creating repository...
+
+    gh repo create "!REPO!" --public
+
+    if errorlevel 1 (
+        echo [ERROR] Failed to create repository.
+        pause
+        exit /b 1
+    )
+
+    echo Repository created successfully.
+) else (
+    echo Repository already exists.
+    echo Using existing repository.
+)
+
+echo.
+echo [4/9] Configuring Git...
+
+if not exist .git (
+    git init
+)
+
+git branch -M main
+
+git remote get-url origin >nul 2>&1
+
+if errorlevel 1 (
+    git remote add origin "!REMOTE!"
+) else (
+    git remote set-url origin "!REMOTE!"
+)
+
+echo Remote:
+git remote -v
+
+echo.
+echo [5/9] Creating .gitignore...
 
 if not exist .gitignore (
     (
@@ -75,32 +133,39 @@ if not exist .gitignore (
 )
 
 echo.
-echo [4/8] Initializing Git...
-
-if not exist .git (
-    git init
-)
-
-git branch -M main
+echo [6/9] Preparing source code...
 
 git add .
 
-git commit -m "Initial commit"
+git diff --cached --quiet
+
+if errorlevel 1 (
+    git commit -m "Update Angular application"
+) else (
+    echo No new changes to commit.
+)
 
 echo.
-echo [5/8] Creating GitHub repository...
+echo [7/9] Pushing source code...
 
-gh repo create "!USERNAME!/!REPONAME!" --public --source=. --remote=origin --push
+git pull origin main --allow-unrelated-histories --no-edit >nul 2>&1
+
+git push -u origin main
 
 if errorlevel 1 (
     echo.
-    echo [ERROR] Failed to create or push repository.
+    echo [ERROR] Git push failed.
+    echo.
+    echo Check:
+    echo - GitHub authentication
+    echo - Repository permissions
+    echo - Remote URL
     pause
     exit /b 1
 )
 
 echo.
-echo [6/8] Creating GitHub Pages workflow...
+echo [8/9] Creating GitHub Pages workflow...
 
 if not exist .github\workflows mkdir .github\workflows
 
@@ -165,41 +230,59 @@ echo         uses: actions/deploy-pages@v4
 ) > .github\workflows\deploy.yml
 
 echo.
-echo [7/8] Pushing workflow...
-
-git add .github\workflows\deploy.yml
-git commit -m "Add GitHub Pages deployment"
-git push origin main
+echo Workflow created.
 
 echo.
-echo [8/8] Configuring GitHub Pages...
+echo [9/9] Uploading deployment workflow...
 
-gh api --method PUT repos/!USERNAME!/!REPONAME!/pages ^
+git add .github\workflows\deploy.yml
+
+git diff --cached --quiet
+
+if errorlevel 1 (
+    git commit -m "Configure GitHub Pages deployment"
+    git push origin main
+) else (
+    echo Workflow already up to date.
+)
+
+echo.
+echo Configuring GitHub Pages...
+
+gh api --method PUT "repos/!USERNAME!/!REPONAME!/pages" ^
     -f "build_type=workflow" >nul 2>&1
 
 echo.
 echo ========================================
-echo              DONE
+echo              DEPLOY STARTED
 echo ========================================
 echo.
 echo Repository:
 echo https://github.com/!USERNAME!/!REPONAME!
 echo.
-echo GitHub Pages:
+echo Website:
 echo https://!USERNAME!.github.io/!REPONAME!/
 echo.
-echo Checking workflow...
+echo GitHub Actions:
+echo https://github.com/!USERNAME!/!REPONAME!/actions
 echo.
 
+echo Waiting for GitHub Actions...
 timeout /t 5 /nobreak >nul
 
-gh run list --repo "!USERNAME!/!REPONAME!" --limit 3
+echo.
+echo Latest workflow runs:
+echo.
+
+gh run list --repo "!REPO!" --limit 5
 
 echo.
 echo ========================================
-echo The GitHub Action will build and deploy
-echo your Angular application automatically.
+echo              FINISHED
 echo ========================================
+echo.
+echo Open:
+echo https://!USERNAME!.github.io/!REPONAME!/
 echo.
 
 pause
