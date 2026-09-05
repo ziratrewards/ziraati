@@ -56,12 +56,12 @@
         </div>
         <!-- Hero Actions -->
         <div class="flex flex-col gap-space-xs pt-space-2xs">
-          <button (click)="syncWatch()"
+          <a routerLink="/customer-info"
             class="w-full h-[52px] bg-primary hover:bg-brand-red-dark active:scale-[0.99] text-on-primary font-label-lg text-label-lg rounded-lg shadow-lg flex items-center justify-center gap-space-xs transition-all"
-            type="button">
+            aria-label="Akıllı saat başvurusunu başlat">
             <span class="material-symbols-outlined text-[20px]">watch</span>
             <span>Hemen Başla</span>
-          </button>
+          </a>
           <div class="flex items-center justify-center gap-space-xs py-space-2xs text-text-secondary">
             <span class="material-symbols-outlined text-[16px] text-status-success">security</span>
             <span class="font-body-sm text-body-sm">Uçtan uca 256-bit donanımsal şifreleme</span>
