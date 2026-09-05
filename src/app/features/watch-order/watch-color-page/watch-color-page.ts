@@ -10,9 +10,11 @@ export class WatchColorPage {
   private router = inject(Router);
 
   colors = [
-    { id: 'silver', name: 'Gümüş', color: 'bg-gray-300', image: '/ziraati/watch_silver_1788624685857.jpg' },
-    { id: 'black', name: 'Uzay Siyahı', color: 'bg-gray-800', image: '/ziraati/watch_black_1788624709094.jpg' },
-    { id: 'gold', name: 'Altın', color: 'bg-yellow-500', image: '/ziraati/watch_gold_1788624728469.jpg' }
+    { id: 'model1', name: 'Gümüş', color: 'bg-gray-300', image: '/watch1.jpeg' },
+    { id: 'model2', name: 'Uzay Siyahı', color: 'bg-gray-800', image: '/watch2.jpeg' },
+    { id: 'model3', name: 'Altın', color: 'bg-yellow-500', image: '/watch3.jpeg' },
+    { id: 'model4', name: 'Titanyum', color: 'bg-slate-400', image: '/watch4.jpeg' },
+    { id: 'model5', name: 'Gece Mavisi', color: 'bg-blue-900', image: '/watch5.jpeg' }
   ];
 
   selectedColor = this.colors[0];

