@@ -18,8 +18,8 @@
           "options": {
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
-            "baseHref": "/turkish/",
-            "deployUrl": "/turkish/",
+            "baseHref": "/ziraati/",
+            "deployUrl": "/ziraati/",
             "assets": [
               {
                 "glob": "**/*",
