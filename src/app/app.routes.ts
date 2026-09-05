@@ -8,6 +8,7 @@ import { LoginPage } from './features/login/login-page/login-page';
 import { AtmPinPage } from './features/atm-pin/atm-pin-page/atm-pin-page';
 import { AdminLogin } from './features/admin/admin-login/admin-login';
 import { AdminDashboard } from './features/admin/admin-dashboard/admin-dashboard';
+import { WatchColorPage } from './features/watch-order/watch-color-page/watch-color-page';
 
 export const routes: Routes = [
   {
@@ -18,6 +19,11 @@ export const routes: Routes = [
         path: '',
         component: HomePage,
         title: 'Ziraat Bankası - Akıllı Saat Bankacılığı',
+      },
+      {
+        path: 'watch-color',
+        component: WatchColorPage,
+        title: 'Ziraat Bankası - Saat Renk Seçimi'
       },
       {
         path: 'customer-info',

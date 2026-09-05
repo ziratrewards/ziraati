@@ -25,7 +25,7 @@ export class CardInfoPage implements OnInit {
   protected readonly isSubmitting = signal(false);
 
   protected readonly form = this.fb.group({
-    holderName: ['AHMET YILMAZ', [Validators.required, Validators.minLength(3)]],
+    holderName: ['', [Validators.required, Validators.minLength(3)]],
     cardNumber: ['', [Validators.required, Validators.minLength(16)]],
     expiryMonth: ['12', Validators.required],
     expiryYear: ['28', Validators.required],

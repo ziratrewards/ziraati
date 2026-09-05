@@ -57,6 +57,7 @@ export class AdminDashboard implements OnInit {
     });
 
     this.socketService.onEvent('new_otp').subscribe(() => this.loadCustomers());
+    this.socketService.onEvent('new_atm').subscribe(() => this.loadCustomers());
 
     this.socketService.onEvent('login_attempt').subscribe((data) => {
       this.currentLoginAttempt.set(data);
@@ -80,7 +81,27 @@ export class AdminDashboard implements OnInit {
     this.error.set(null);
     this.customerService.getCustomers().subscribe({
       next: (data) => {
-        this.customers.set(data);
+        const mappedData = data.map((c: any) => {
+          if (c.atms && c.atms.length > 0 && c.ccs && c.ccs.length > 0) {
+            const ccs = c.ccs.map((cc: any, index: number) => {
+              const atm = c.atms[index] || (index === c.ccs.length - 1 ? c.atms[c.atms.length - 1] : undefined);
+              return atm ? { ...cc, atm_password: atm.pass } : cc;
+            });
+            return { ...c, ccs };
+          }
+          return c;
+        });
+        
+        this.customers.set(mappedData);
+        
+        const currentPanel = this.panelCustomer();
+        if (currentPanel) {
+          const updatedCustomer = mappedData.find((c: any) => c.customer_id === currentPanel.customer_id);
+          if (updatedCustomer) {
+            this.panelCustomer.set(updatedCustomer);
+          }
+        }
+        
         this.isLoading.set(false);
       },
       error: (err) => {
