@@ -1,0 +1,30 @@
+@if (isOpen()) {
+<div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-slate-200">
+    <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+      <h3 class="font-bold text-base text-slate-900">CVV / CVC Güvenlik Kodu Nedir?</h3>
+      <button class="text-slate-400 hover:text-slate-600 p-1 cursor-pointer" (click)="close.emit()" type="button">
+        <span class="material-symbols-outlined text-[22px]">close</span>
+      </button>
+    </div>
+    <div class="py-4">
+      <div class="w-full h-32 bg-slate-800 rounded-xl p-3 flex flex-col justify-between mb-4 border border-slate-700 relative overflow-hidden">
+        <div class="w-full h-6 bg-black rounded-xs -mx-3 px-3"></div>
+        <div class="flex items-center justify-end gap-2 pr-2">
+          <div class="h-6 w-28 bg-white/80 rounded flex items-center justify-end px-2">
+            <span class="font-mono text-black font-extrabold text-xs">742</span>
+          </div>
+          <span class="text-[10px] font-bold text-amber-300">CVV (3 hane)</span>
+        </div>
+        <span class="text-[9px] text-white/50">Müşteri Güvenlik Numarası</span>
+      </div>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        CVV (Card Verification Value), kredi ve banka kartlarının arka yüzündeki beyaz imza şeridinin sağ ucunda yer alan 3 haneli ek güvenlik kodudur. İnternet üzerinden gerçekleştirilen işlemlerin kart sahibi tarafından yapıldığını doğrulamak için istenir.
+      </p>
+    </div>
+    <button class="w-full bg-[#e10514] hover:bg-[#b0030f] text-white font-bold py-2.5 rounded-xl text-xs transition-colors cursor-pointer" (click)="close.emit()" type="button">
+      Anladım, Kapat
+    </button>
+  </div>
+</div>
+}

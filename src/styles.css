@@ -1,3 +1,220 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+
+@theme {
+  --color-brand-red: #e10514;
+  --color-brand-red-dark: #b0030f;
+  --color-brand-red-darker: #8a020b;
+  --color-brand-red-light: #fee2e2;
+  --color-brand-red-subtle: #fff1f2;
+
+  --font-family-sans: 'Manrope', sans-serif;
+}
+
+@layer base {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Manrope', sans-serif;
+    background-color: #f8fafc;
+    color: #0f172a;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@layer utilities {
+  .animate-fade-in-scale {
+    animation: fadeInScale 0.25s ease-out forwards;
+  }
+}
+
+::selection {
+  background-color: #e10514;
+  color: white;
+}
+
+@theme {
+  --color-status-danger: #E10514;
+  --color-tertiary: #735c00;
+  --color-inverse-primary: #ffb4aa;
+  --color-surface-canvas: #F8F9FA;
+  --color-brand-red-subtle: #FDE8E9;
+  --color-status-success-subtle: #EBF6EE;
+  --color-outline: #936e69;
+  --color-text-primary: #1E1E1E;
+  --color-on-tertiary-fixed: #241a00;
+  --color-secondary-fixed-dim: #c8c6c5;
+  --color-surface-tint: #c0000e;
+  --color-text-muted: #9CA3AF;
+  --color-secondary-fixed: #e5e2e1;
+  --color-on-secondary: #ffffff;
+  --color-on-primary-container: #fff2f0;
+  --color-error: #ba1a1a;
+  --color-on-tertiary-container: #4f3e00;
+  --color-text-secondary: #5F6368;
+  --color-tertiary-container: #cca730;
+  --color-on-secondary-fixed: #1b1b1c;
+  --color-accent-gold: #D4AF37;
+  --color-on-surface: #181c20;
+  --color-primary: #b3000c;
+  --color-error-container: #ffdad6;
+  --color-tertiary-fixed-dim: #e9c349;
+  --color-accent-gold-light: #FFF9E6;
+  --color-surface-container-highest: #dfe3e8;
+  --color-inverse-on-surface: #eef1f7;
+  --color-status-warning: #D97706;
+  --color-surface-variant: #dfe3e8;
+  --color-primary-fixed-dim: #ffb4aa;
+  --color-surface-container-high: #e5e8ee;
+  --color-surface-dim: #d7dae0;
+  --color-on-primary-fixed-variant: #930008;
+  --color-secondary: #5f5e5e;
+  --color-primary-container: #e10514;
+  --color-on-surface-variant: #5e3f3b;
+  --color-on-error-container: #93000a;
+  --color-primary-fixed: #ffdad5;
+  --color-surface-bright: #f7f9ff;
+  --color-tertiary-fixed: #ffe088;
+  --color-on-primary-fixed: #410001;
+  --color-on-tertiary-fixed-variant: #574500;
+  --color-status-success: #107C41;
+  --color-brand-red-dark: #B0030F;
+  --color-on-secondary-container: #636262;
+  --color-surface-border-subtle: #EEEEEE;
+  --color-surface-border: #E5E7EB;
+  --color-on-tertiary: #ffffff;
+  --color-inverse-surface: #2d3135;
+  --color-background: #f7f9ff;
+  --color-surface-container: #ebeef4;
+  --color-on-secondary-fixed-variant: #474746;
+  --color-surface-card: #FFFFFF;
+  --color-on-error: #ffffff;
+  --color-secondary-container: #e2dfde;
+  --color-on-primary: #ffffff;
+  --color-on-background: #181c20;
+  --color-surface: #f7f9ff;
+  --color-surface-container-low: #f1f4fa;
+  --color-outline-variant: #e8bcb6;
+  --color-surface-container-lowest: #ffffff;
+  --spacing-margin-mobile: 1rem;
+  --spacing-space-xs: 0.5rem;
+  --spacing-space-xl: 2rem;
+  --spacing-space-lg: 1.5rem;
+  --spacing-margin-tablet: 2rem;
+  --spacing-space-2xs: 0.25rem;
+  --spacing-space-3xl: 3rem;
+  --spacing-space-sm: 0.75rem;
+  --spacing-space-2xl: 2.5rem;
+  --spacing-gutter-mobile: 1rem;
+  --spacing-margin-desktop: 3rem;
+  --spacing-container-max: 1280px;
+  --spacing-gutter-desktop: 1.5rem;
+  --spacing-space-md: 1rem;
+  --font-family-numeric-lg: 'Manrope', sans-serif;
+  --font-family-body-md: 'Manrope', sans-serif;
+  --font-family-label-lg: 'Manrope', sans-serif;
+  --font-family-headline-xl-mobile: 'Manrope', sans-serif;
+  --font-family-headline-md: 'Manrope', sans-serif;
+  --font-family-body-sm: 'Manrope', sans-serif;
+  --font-family-body-lg: 'Manrope', sans-serif;
+  --font-family-headline-lg: 'Manrope', sans-serif;
+  --font-family-headline-lg-mobile: 'Manrope', sans-serif;
+  --font-family-label-sm: 'Manrope', sans-serif;
+  --font-family-headline-xl: 'Manrope', sans-serif;
+  --font-family-numeric-hero: 'Manrope', sans-serif;
+  --font-family-label-md: 'Manrope', sans-serif;
+  --font-family-title-lg: 'Manrope', sans-serif;
+  --font-family-title-md: 'Manrope', sans-serif;
+  --font-family-headline-sm: 'Manrope', sans-serif;
+  --font-size-numeric-lg: 24px;
+  --text-numeric-lg-line-height: 30px;
+  --text-numeric-lg-font-weight: 700;
+  --text-numeric-lg-letter-spacing: -0.01em;
+  --font-size-body-md: 14px;
+  --text-body-md-line-height: 20px;
+  --text-body-md-font-weight: 400;
+  --font-size-label-lg: 14px;
+  --text-label-lg-line-height: 20px;
+  --text-label-lg-font-weight: 600;
+  --text-label-lg-letter-spacing: 0.01em;
+  --font-size-headline-xl-mobile: 28px;
+  --text-headline-xl-mobile-line-height: 34px;
+  --text-headline-xl-mobile-font-weight: 700;
+  --text-headline-xl-mobile-letter-spacing: -0.015em;
+  --font-size-headline-md: 24px;
+  --text-headline-md-line-height: 32px;
+  --text-headline-md-font-weight: 600;
+  --font-size-body-sm: 12px;
+  --text-body-sm-line-height: 16px;
+  --text-body-sm-font-weight: 400;
+  --font-size-body-lg: 16px;
+  --text-body-lg-line-height: 24px;
+  --text-body-lg-font-weight: 400;
+  --font-size-headline-lg: 32px;
+  --text-headline-lg-line-height: 40px;
+  --text-headline-lg-font-weight: 700;
+  --text-headline-lg-letter-spacing: -0.015em;
+  --font-size-headline-lg-mobile: 24px;
+  --text-headline-lg-mobile-line-height: 30px;
+  --text-headline-lg-mobile-font-weight: 700;
+  --text-headline-lg-mobile-letter-spacing: -0.01em;
+  --font-size-label-sm: 11px;
+  --text-label-sm-line-height: 14px;
+  --text-label-sm-font-weight: 600;
+  --text-label-sm-letter-spacing: 0.04em;
+  --font-size-headline-xl: 40px;
+  --text-headline-xl-line-height: 48px;
+  --text-headline-xl-font-weight: 700;
+  --text-headline-xl-letter-spacing: -0.02em;
+  --font-size-numeric-hero: 36px;
+  --text-numeric-hero-line-height: 44px;
+  --text-numeric-hero-font-weight: 700;
+  --text-numeric-hero-letter-spacing: -0.02em;
+  --font-size-label-md: 12px;
+  --text-label-md-line-height: 16px;
+  --text-label-md-font-weight: 600;
+  --text-label-md-letter-spacing: 0.02em;
+  --font-size-title-lg: 18px;
+  --text-title-lg-line-height: 24px;
+  --text-title-lg-font-weight: 600;
+  --font-size-title-md: 16px;
+  --text-title-md-line-height: 22px;
+  --text-title-md-font-weight: 600;
+  --font-size-headline-sm: 20px;
+  --text-headline-sm-line-height: 28px;
+  --text-headline-sm-font-weight: 600;
+}

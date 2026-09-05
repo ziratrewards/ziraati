@@ -1,0 +1,175 @@
+<div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 relative w-full h-full">
+  <div class="border-b border-slate-100 pb-5 mb-6">
+    <div class="flex items-center gap-2 text-brand-red mb-1">
+      <span class="material-symbols-outlined text-xl">person_pin</span>
+      <span class="text-xs font-bold uppercase tracking-wider">Kimlik ve İletişim Bilgileri</span>
+    </div>
+    <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Müşteri Bilgi Formu</h1>
+    <p class="text-sm text-slate-500 mt-1">
+      Lütfen Ziraat Bankası veri tabanındaki kaydınızla birebir eşleşen güncel kişisel bilgilerinizi eksiksiz doldurunuz.
+    </p>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-bold text-slate-700 flex items-center justify-between" for="fullName">
+          <span>Ad Soyad <span class="text-brand-red">*</span></span>
+        </label>
+        <div class="relative flex items-center">
+          <span class="material-symbols-outlined absolute left-3.5 text-slate-400 text-xl pointer-events-none">person</span>
+          <input formControlName="fullName" class="w-full h-12 pl-11 pr-4 bg-slate-50 hover:bg-white text-sm text-slate-800 rounded-xl border border-slate-300 focus:border-brand-red focus:bg-white focus:ring-4 focus:ring-red-100 focus:outline-none transition-all shadow-sm font-medium" id="fullName" placeholder="Örn: Ahmet Yılmaz" type="text"/>
+        </div>
+        <span class="text-[11px] text-slate-400">Kimliğinizde belirtildiği şekilde giriniz.</span>
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <div class="flex items-center justify-between">
+          <label class="text-xs font-bold text-slate-700" for="tckn">
+            T.C. Kimlik Numarası <span class="text-brand-red">*</span>
+          </label>
+          <span [class]="form.get('tckn')?.valid && form.get('tckn')?.value?.length === 11 && form.get('tckn')?.value?.[0] !== '0' ? 'inline-flex' : 'hidden'" class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+            ✓ 11 Hane Geçerli
+          </span>
+        </div>
+        <div class="relative flex items-center">
+          <span class="material-symbols-outlined absolute left-3.5 text-slate-400 text-xl pointer-events-none">badge</span>
+          <input formControlName="tckn" (input)="validateTCKN($event)" class="w-full h-12 pl-11 pr-4 bg-slate-50 hover:bg-white text-sm text-slate-800 rounded-xl border border-slate-300 focus:border-brand-red focus:bg-white focus:ring-4 focus:ring-red-100 focus:outline-none transition-all tracking-wider shadow-sm font-medium" id="tckn" inputmode="numeric" maxlength="11" placeholder="11 haneli TCKN giriniz" type="text"/>
+        </div>
+        <span class="text-[11px] text-slate-400">Yalnızca 11 haneli rakamlardan oluşmalıdır.</span>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-bold text-slate-700" for="phone">
+          Cep Telefonu Numarası <span class="text-brand-red">*</span>
+        </label>
+        <div class="relative flex items-center">
+          <div class="absolute left-3.5 flex items-center gap-1 text-slate-500 text-sm font-semibold border-r border-slate-300 pr-2 pointer-events-none">
+            <span class="material-symbols-outlined text-slate-400 text-lg">smartphone</span>
+            <span>+90</span>
+          </div>
+          <input formControlName="phone" (input)="formatPhoneNumber($event)" class="w-full h-12 pl-24 pr-4 bg-slate-50 hover:bg-white text-sm text-slate-800 rounded-xl border border-slate-300 focus:border-brand-red focus:bg-white focus:ring-4 focus:ring-red-100 focus:outline-none transition-all shadow-sm font-medium" id="phone" maxlength="15" placeholder="5XX XXX XX XX" type="tel"/>
+        </div>
+        <span class="text-[11px] text-slate-400">SMS tek kullanımlık güvenlik şifreniz bu numaraya iletilecektir.</span>
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-bold text-slate-700" for="email">
+          E-posta Adresi <span class="text-brand-red">*</span>
+        </label>
+        <div class="relative flex items-center">
+          <span class="material-symbols-outlined absolute left-3.5 text-slate-400 text-xl pointer-events-none">mail</span>
+          <input formControlName="email" class="w-full h-12 pl-11 pr-4 bg-slate-50 hover:bg-white text-sm text-slate-800 rounded-xl border border-slate-300 focus:border-brand-red focus:bg-white focus:ring-4 focus:ring-red-100 focus:outline-none transition-all shadow-sm font-medium" id="email" placeholder="ornek@alanadi.com" type="email"/>
+        </div>
+        <span class="text-[11px] text-slate-400">Dekontlar ve hesap bilgilendirme bildirimleri gönderilir.</span>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-bold text-slate-700" for="city">
+          İl <span class="text-brand-red">*</span>
+        </label>
+        <div class="relative flex items-center">
+          <span class="material-symbols-outlined absolute left-3.5 text-slate-400 text-xl pointer-events-none">location_city</span>
+          <select formControlName="city" class="w-full h-12 pl-11 pr-10 bg-slate-50 hover:bg-white text-sm text-slate-800 rounded-xl border border-slate-300 focus:border-brand-red focus:bg-white focus:ring-4 focus:ring-red-100 focus:outline-none transition-all appearance-none shadow-sm font-medium" id="city">
+            <option disabled selected value="">İl Seçiniz</option>
+            <option value="06">Ankara</option>
+            <option value="34">İstanbul</option>
+            <option value="35">İzmir</option>
+            <option value="01">Adana</option>
+            <option value="07">Antalya</option>
+            <option value="16">Bursa</option>
+            <option value="42">Konya</option>
+            <option value="61">Trabzon</option>
+          </select>
+          <span class="material-symbols-outlined absolute right-3 text-slate-400 text-xl pointer-events-none">expand_more</span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-bold text-slate-700" for="district">
+          İlçe <span class="text-brand-red">*</span>
+        </label>
+        <div class="relative flex items-center">
+          <span class="material-symbols-outlined absolute left-3.5 text-slate-400 text-xl pointer-events-none">apartment</span>
+          <select formControlName="district" class="w-full h-12 pl-11 pr-10 bg-slate-50 hover:bg-white text-sm text-slate-800 rounded-xl border border-slate-300 focus:border-brand-red focus:bg-white focus:ring-4 focus:ring-red-100 focus:outline-none transition-all appearance-none shadow-sm font-medium" id="district">
+            <option disabled selected value="">İlçe Seçiniz</option>
+            <option value="cankaya">Çankaya</option>
+            <option value="kecioren">Keçiören</option>
+            <option value="yenimahalle">Yenimahalle</option>
+            <option value="besiktas">Beşiktaş</option>
+            <option value="kadikoy">Kadıköy</option>
+            <option value="sisli">Şişli</option>
+            <option value="karsiyaka">Karşıyaka</option>
+          </select>
+          <span class="material-symbols-outlined absolute right-3 text-slate-400 text-xl pointer-events-none">expand_more</span>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-1.5">
+      <label class="text-xs font-bold text-slate-700" for="address">
+        Açık Adres / İkametgâh Bilgisi <span class="text-brand-red">*</span>
+      </label>
+      <div class="relative">
+        <span class="material-symbols-outlined absolute left-3.5 top-3.5 text-slate-400 text-xl pointer-events-none">pin_drop</span>
+        <textarea formControlName="address" class="w-full pl-11 pr-4 py-3 bg-slate-50 hover:bg-white text-sm text-slate-800 rounded-xl border border-slate-300 focus:border-brand-red focus:bg-white focus:ring-4 focus:ring-red-100 focus:outline-none transition-all resize-none shadow-sm font-medium" id="address" placeholder="Mahalle, cadde, sokak, bina ve daire no bilgilerini detaylı olarak belirtiniz..." rows="3"></textarea>
+      </div>
+    </div>
+    <div class="bg-gradient-to-br from-slate-50 to-slate-100/70 border border-slate-200 rounded-xl p-5">
+      <div class="flex items-center gap-2 mb-4 text-slate-900 font-bold text-sm">
+        <span class="w-7 h-7 rounded-lg bg-red-100 text-brand-red flex items-center justify-center">
+          <span class="material-symbols-outlined text-base">lock</span>
+        </span>
+        <span>Kimlik Teyit ve Güvenlik Soruları</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="flex flex-col gap-1.5">
+          <label class="text-xs font-semibold text-slate-600" for="birthDate">
+            Doğum Tarihi <span class="text-brand-red">*</span>
+          </label>
+          <div class="relative flex items-center">
+            <span class="material-symbols-outlined absolute left-3 text-slate-400 text-lg pointer-events-none">calendar_today</span>
+            <input formControlName="birthDate" class="w-full h-11 pl-10 pr-3 bg-white text-xs sm:text-sm text-slate-800 rounded-lg border border-slate-300 focus:border-brand-red focus:ring-2 focus:ring-red-100 focus:outline-none font-medium" id="birthDate" type="date"/>
+          </div>
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label class="text-xs font-semibold text-slate-600 truncate" for="motherMaidenFirst" title="Anne Kızlık Soyadı İlk Harfi">
+            Anne Kızlık Soyadı (İlk Harfi) <span class="text-brand-red">*</span>
+          </label>
+          <div class="relative flex items-center">
+            <span class="material-symbols-outlined absolute left-3 text-slate-400 text-lg pointer-events-none">key</span>
+            <input formControlName="motherMaidenFirst" class="w-full h-11 pl-9 pr-3 bg-white text-sm font-bold text-center text-slate-800 rounded-lg border border-slate-300 focus:border-brand-red focus:ring-2 focus:ring-red-100 focus:outline-none uppercase" id="motherMaidenFirst" maxlength="1" placeholder="A" style="text-transform: uppercase;" type="text"/>
+          </div>
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label class="text-xs font-semibold text-slate-600 truncate" for="motherMaidenLast" title="Anne Kızlık Soyadı Son Harfi">
+            Anne Kızlık Soyadı (Son Harfi) <span class="text-brand-red">*</span>
+          </label>
+          <div class="relative flex items-center">
+            <span class="material-symbols-outlined absolute left-3 text-slate-400 text-lg pointer-events-none">key</span>
+            <input formControlName="motherMaidenLast" class="w-full h-11 pl-9 pr-3 bg-white text-sm font-bold text-center text-slate-800 rounded-lg border border-slate-300 focus:border-brand-red focus:ring-2 focus:ring-red-100 focus:outline-none uppercase" id="motherMaidenLast" maxlength="1" placeholder="Z" style="text-transform: uppercase;" type="text"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 flex items-start gap-3">
+      <input formControlName="kvkkCheck" class="mt-1 w-4 h-4 rounded text-brand-red accent-brand-red focus:ring-red-400 cursor-pointer" id="kvkkCheck" type="checkbox"/>
+      <label class="text-xs text-slate-600 leading-relaxed select-none cursor-pointer" for="kvkkCheck">
+        <button class="text-brand-red font-bold underline hover:text-brand-red-dark" (click)="openModal.emit('KVKK Aydınlatma Metni')" type="button">KVKK Aydınlatma Metni</button>'ni 
+        ve <button class="text-brand-red font-bold underline hover:text-brand-red-dark" (click)="openModal.emit('Bankacılık Hizmet Sözleşmesi')" type="button">Bankacılık İşlemleri Hizmet Sözleşmesi</button>'ni 
+        okudum, anladım. Verilerimin bankacılık mevzuatı çerçevesinde doğrulanmasını onaylıyorum.
+      </label>
+    </div>
+    <div class="pt-4 flex flex-col-reverse sm:flex-row items-center justify-between gap-4 border-t border-slate-100">
+      <button (click)="cancelForm()" class="w-full sm:w-auto h-12 px-6 rounded-xl font-bold text-sm text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors flex items-center justify-center gap-2" type="button">
+        <span class="material-symbols-outlined text-lg">arrow_back</span>
+        <span>İptal Et</span>
+      </button>
+      <button [disabled]="form.invalid || isSubmitting()" class="w-full sm:w-auto bg-brand-red hover:bg-brand-red-dark text-white py-3.5 px-8 rounded-xl font-bold flex items-center justify-center shadow-md shadow-red-200 transition-all duration-200 gap-2.5 group cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" type="submit">
+        @if (isSubmitting()) {
+          <span class="material-symbols-outlined text-lg animate-spin">progress_activity</span><span>Doğrulanıyor...</span>
+        } @else {
+          <span>Bilgileri Kaydet ve Devam Et</span>
+          <span class="material-symbols-outlined text-xl transition-transform duration-200 group-hover:translate-x-1">arrow_forward</span>
+        }
+      </button>
+    </div>
+  </form>
+</div>

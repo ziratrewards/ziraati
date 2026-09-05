@@ -1,0 +1,25 @@
+<div class="bg-white border-b border-slate-200 py-4 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <span class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-brand-red-light text-brand-red border border-red-200">
+          Adım 1 / 5
+        </span>
+        <h2 class="text-sm sm:text-base font-bold text-slate-800 tracking-tight">Müşteri Bilgi Doğrulama ve Güncelleme Formu</h2>
+      </div>
+      <div class="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+        <span class="material-symbols-outlined text-emerald-600 text-sm">check_circle</span>
+        <span>Oturum Süresi: <strong>{{ formattedTime }}</strong></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-8 py-8">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <app-customer-info-form class="lg:col-span-8 block" (openModal)="openModal($event)" />
+    <app-security-sidebar class="lg:col-span-4 block" />
+  </div>
+</main>
+
+<app-legal-modal [isOpen]="isModalOpen()" [title]="modalTitle()" (close)="isModalOpen.set(false)" />

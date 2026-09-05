@@ -1,0 +1,242 @@
+<main class="max-w-7xl mx-auto px-4 lg:px-8 py-6 w-full flex-grow">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <div class="lg:col-span-5 flex flex-col gap-6">
+      
+      <app-card-mockup
+        [cardType]="cardType()"
+        [cardName]="formValues().holderName ?? ''"
+        [cardNumber]="formValues().cardNumber ?? ''"
+        [expiryMonth]="formValues().expiryMonth ?? ''"
+        [expiryYear]="formValues().expiryYear ?? ''"
+        [cvv]="formValues().cvv ?? ''"
+      />
+
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex items-center gap-4">
+        <div class="w-20 h-[52px] bg-slate-800 rounded-lg p-1.5 flex flex-col justify-between shrink-0 shadow-inner border border-slate-700">
+          <div class="w-full h-3 bg-black rounded-xs"></div>
+          <div class="flex items-center justify-end gap-1">
+            <div class="h-3.5 w-10 bg-white/90 rounded-xs flex items-center justify-end px-1">
+              <span class="font-mono text-[9px] text-slate-900 font-bold">
+                {{ formValues().cvv || '•••' }}
+              </span>
+            </div>
+            <span class="text-[8px] font-bold text-amber-300">CVV</span>
+          </div>
+        </div>
+        <div>
+          <h4 class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+            <span>Güvenlik Kodu (CVV / CVC) Nedir?</span>
+          </h4>
+          <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+            Kartınızın arka yüzündeki imza şeridinde bulunan son 3 haneli güvenlik numarasıdır.
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-emerald-50/60 rounded-2xl p-5 border border-emerald-200/80 shadow-xs flex flex-col gap-3">
+        <div class="flex items-center gap-2 text-emerald-800 font-bold text-xs">
+          <span class="material-symbols-outlined text-[20px] text-emerald-600">verified_user</span>
+          <span>Uluslararası Bankacılık Güvenlik Standartları</span>
+        </div>
+        <p class="text-[11px] text-emerald-900/80 leading-relaxed">
+          Bu sayfadaki veri iletimi 256-bit SSL şifreleme ve 3D Secure 2.0 protokolü ile korunmaktadır. Kart bilgileriniz kesinlikle sunucularda saklanmaz.
+        </p>
+        <div class="flex flex-wrap items-center gap-2 pt-1">
+          <span class="bg-white text-slate-700 font-semibold text-[10px] px-2.5 py-1 rounded-md border border-emerald-200 shadow-xs">
+            PCI-DSS Level 1
+          </span>
+          <span class="bg-white text-emerald-700 font-semibold text-[10px] px-2.5 py-1 rounded-md border border-emerald-200 shadow-xs flex items-center gap-1">
+            <span class="material-symbols-outlined text-[12px]">lock</span> 3D Secure 2.0
+          </span>
+          <span class="bg-white text-[#e10514] font-semibold text-[10px] px-2.5 py-1 rounded-md border border-emerald-200 shadow-xs">
+            BKM Express
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:col-span-7 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+      <div class="mb-6">
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Kart Bilgilerini Giriniz</h2>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1">
+          Ödemenizi tamamlamak veya doğrulamak istediğiniz banka/kredi kartı bilgilerinizi giriniz.
+        </p>
+      </div>
+
+      <div class="mb-6 p-1 bg-slate-100 rounded-xl grid grid-cols-2 gap-1">
+        <button 
+          [class]="cardType() === 'credit' ? 'py-2.5 px-4 rounded-lg font-bold text-xs sm:text-sm transition-all text-center bg-white text-[#e10514] shadow-xs' : 'py-2.5 px-4 rounded-lg font-semibold text-xs sm:text-sm transition-all text-center text-slate-600 hover:text-slate-900 cursor-pointer'"
+          (click)="setCardType('credit')" type="button">
+          Bankkart Kredi Kartı
+        </button>
+        <button 
+          [class]="cardType() === 'debit' ? 'py-2.5 px-4 rounded-lg font-bold text-xs sm:text-sm transition-all text-center bg-white text-[#e10514] shadow-xs' : 'py-2.5 px-4 rounded-lg font-semibold text-xs sm:text-sm transition-all text-center text-slate-600 hover:text-slate-900 cursor-pointer'"
+          (click)="setCardType('debit')" type="button">
+          Bankkart Banka Kartı
+        </button>
+      </div>
+
+      <form class="space-y-5" [formGroup]="form" (ngSubmit)="submitForm()">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5" for="input-holder-name">
+            Kart Üzerindeki İsim
+          </label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">
+              person
+            </span>
+            <input class="w-full h-12 pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 uppercase tracking-wide focus:bg-white focus:border-[#e10514] focus:ring-2 focus:ring-red-100 outline-hidden transition-all" id="input-holder-name" maxlength="30" placeholder="AD SOYAD" formControlName="holderName" type="text" />
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1">Kart üzerinde yazıldığı şekilde Türkçe harf uyumuyla giriniz.</p>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="text-xs font-bold uppercase tracking-wider text-slate-700" for="input-number">
+              Kart Numarası
+            </label>
+            <span class="text-[11px] font-semibold text-slate-400">16 Hane</span>
+          </div>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">
+              credit_card
+            </span>
+            <input class="w-full h-12 pl-11 pr-24 bg-slate-50 border border-slate-200 rounded-xl font-mono text-sm sm:text-base font-bold text-slate-800 tracking-wider focus:bg-white focus:border-[#e10514] focus:ring-2 focus:ring-red-100 outline-hidden transition-all" id="input-number" inputmode="numeric" maxlength="19" (input)="handleNumberFormat($event)" placeholder="•••• •••• •••• ••••" formControlName="cardNumber" type="text"/>
+            <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
+              <span [class]="getBrandClass()">
+                {{ getBrandText() }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+              Son Kullanma Tarihi
+            </label>
+            <div class="grid grid-cols-2 gap-2">
+              <select class="h-12 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:bg-white focus:border-[#e10514] focus:ring-2 focus:ring-red-100 outline-hidden transition-all cursor-pointer" formControlName="expiryMonth">
+                <option disabled value="">Ay</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+              </select>
+              <select class="h-12 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:bg-white focus:border-[#e10514] focus:ring-2 focus:ring-red-100 outline-hidden transition-all cursor-pointer" formControlName="expiryYear">
+                <option disabled value="">Yıl</option>
+                <option value="25">2025</option>
+                <option value="26">2026</option>
+                <option value="27">2027</option>
+                <option value="28">2028</option>
+                <option value="29">2029</option>
+                <option value="30">2030</option>
+                <option value="31">2031</option>
+                <option value="32">2032</option>
+                <option value="33">2033</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="text-xs font-bold uppercase tracking-wider text-slate-700" for="input-cvv">
+                Güvenlik Kodu (CVV)
+              </label>
+              <button class="text-[11px] font-semibold text-[#e10514] hover:underline flex items-center gap-0.5 cursor-pointer" (click)="isCvvModalOpen.set(true)" type="button">
+                <span class="material-symbols-outlined text-[14px]">help</span>
+                <span>Yardım</span>
+              </button>
+            </div>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">
+                lock
+              </span>
+              <input class="w-full h-12 pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-xl font-mono text-sm sm:text-base font-bold text-slate-800 tracking-widest focus:bg-white focus:border-[#e10514] focus:ring-2 focus:ring-red-100 outline-hidden transition-all" id="input-cvv" inputmode="numeric" maxlength="3" placeholder="•••" formControlName="cvv" type="password"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-amber-50 rounded-xl p-3.5 border border-amber-200 flex items-start gap-3">
+          <span class="material-symbols-outlined text-amber-600 text-[20px] shrink-0 mt-0.5">
+            notification_important
+          </span>
+          <div class="text-xs text-amber-900 leading-relaxed">
+            <span class="font-bold block text-amber-950 mb-0.5">3D Secure Doğrulama Zorunluluğu</span>
+            Devam ettiğinizde bankanız sisteminde kayıtlı cep telefonunuza tek kullanımlık SMS onay kodu iletilecektir.
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3 pt-1">
+          <input class="mt-1 w-4 h-4 rounded text-[#e10514] focus:ring-[#e10514] border-slate-300 accent-[#e10514] cursor-pointer shrink-0" id="agreement-chk" formControlName="agreement" type="checkbox"/>
+          <label class="text-xs text-slate-600 select-none cursor-pointer leading-relaxed" for="agreement-chk">
+            Kart verilerimin BDDK mevzuatı ve 6698 sayılı KVKK kapsamında işlem güvenliği doğrulaması amacıyla şifrelenerek işlenmesini ve 3D Secure ekranına yönlendirilmesini onaylıyorum.
+          </label>
+        </div>
+
+        <div class="pt-3 flex flex-col sm:flex-row items-center gap-3">
+          <button class="w-full sm:flex-1 bg-[#e10514] hover:bg-[#b0030f] text-white font-bold py-3.5 px-6 rounded-xl shadow-md shadow-red-600/20 flex items-center justify-center gap-2 text-sm transition-all transform active:scale-[0.99] cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed" type="submit" [disabled]="isSubmitting()">
+            @if (isSubmitting()) {
+              <span class="material-symbols-outlined text-[18px] animate-spin">sync</span>
+              <span>Güvenlik Onayı Sağlanıyor...</span>
+            } @else {
+              <span>Kart Bilgilerini Doğrula ve Devam Et</span>
+              <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+            }
+          </button>
+          <button class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3.5 px-5 rounded-xl text-sm transition-colors text-center cursor-pointer" (click)="location.back()" type="button">
+            Geri Dön
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-5">
+    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex items-start gap-4 transition-all hover:border-red-200 hover:shadow-sm">
+      <div class="w-11 h-11 rounded-xl bg-red-50 text-[#e10514] flex items-center justify-center shrink-0">
+        <span class="material-symbols-outlined text-[24px]">contactless</span>
+      </div>
+      <div>
+        <h3 class="font-bold text-sm text-slate-900">Temassız Kart Desteği</h3>
+        <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+          Ziraat Bankkart temassız özellikli tüm kartlarınızla şifresiz ve hızlı işlem limitlerinden anında yararlanabilirsiniz.
+        </p>
+      </div>
+    </div>
+    
+    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex items-start gap-4 transition-all hover:border-red-200 hover:shadow-sm">
+      <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+        <span class="material-symbols-outlined text-[24px]">redeem</span>
+      </div>
+      <div>
+        <h3 class="font-bold text-sm text-slate-900">Anında Puan &amp; Taksit</h3>
+        <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+          Bankkart Lira ve peşin fiyatına taksit fırsatları sonraki onay aşamasında otomatik olarak kartınıza uygulanacaktır.
+        </p>
+      </div>
+    </div>
+    
+    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex items-start gap-4 transition-all hover:border-red-200 hover:shadow-sm">
+      <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+        <span class="material-symbols-outlined text-[24px]">support_agent</span>
+      </div>
+      <div>
+        <h3 class="font-bold text-sm text-slate-900">7/24 Kart Destek Hattı</h3>
+        <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+          Her türlü şüpheli işlem, kart bloke ve destek bildirimleriniz için 0850 220 00 00 numarasından bize ulaşabilirsiniz.
+        </p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<app-cvv-modal [isOpen]="isCvvModalOpen()" (close)="isCvvModalOpen.set(false)" />

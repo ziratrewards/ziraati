@@ -1,0 +1,203 @@
+<main class="flex-1 px-4 lg:px-8 py-6 w-full flex-grow">
+  <div class="max-w-6xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div class="lg:col-span-7 bg-white rounded-2xl shadow-sm border border-slate-200 p-8 flex flex-col justify-between">
+        <div>
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <div>
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[#e10514] text-xs font-bold mb-3 border border-red-100">
+                <span class="material-symbols-outlined text-[15px]">verified_user</span>
+                <span>Adım 4 / 5 • 256-bit Güvenli Doğrulama</span>
+              </div>
+              <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+                <span class="material-symbols-outlined text-[#e10514] text-[28px]">smartphone</span>
+                Tek Kullanımlık Şifre (OTP) Doğrulama
+              </h1>
+            </div>
+          </div>
+          
+          <p class="text-slate-600 text-sm leading-relaxed mb-8">
+            Bankamız sisteminde kayıtlı <span class="font-bold text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">+90 (532) *** ** 42</span> numaralı cep telefonunuza 6 haneli doğrulama şifresi gönderilmiştir.
+          </p>
+          
+          <div class="mb-7">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
+              SMS Onay Kodunu Giriniz
+            </label>
+            <div class="flex justify-between items-center gap-2 sm:gap-3">
+              @for (control of otpControls.controls; track $index) {
+                <input 
+                  #otpInput
+                  [formControl]="control"
+                  (input)="onInput($event, $index)"
+                  (keydown)="onKeyDown($event, $index)"
+                  (paste)="onPaste($event)"
+                  [autofocus]="$index === 0"
+                  class="w-12 h-14 border-2 border-slate-300 rounded-xl text-2xl font-bold text-center text-slate-900 focus:border-[#e10514] focus:ring-2 focus:ring-red-100 outline-none transition-all duration-200 bg-white" 
+                  [class.border-red-500]="feedbackMessage().type === 'error' && !control.value"
+                  [class.bg-red-50]="feedbackMessage().type === 'error' && !control.value"
+                  inputmode="numeric" 
+                  maxlength="1" 
+                  pattern="[0-9]*" 
+                  type="text"
+                />
+              }
+            </div>
+            
+            <p class="mt-2.5 text-xs font-medium flex items-center gap-1.5" 
+               [class.text-slate-500]="feedbackMessage().type === 'info'"
+               [class.text-emerald-700]="feedbackMessage().type === 'success'"
+               [class.text-[#e10514]]="feedbackMessage().type === 'error'"
+               [class.text-amber-700]="feedbackMessage().type === 'warning'">
+              <span class="material-symbols-outlined text-[16px]"
+                [class.text-slate-400]="feedbackMessage().type === 'info'"
+                [class.text-emerald-600]="feedbackMessage().type === 'success'"
+                [class.text-[#e10514]]="feedbackMessage().type === 'error'"
+                [class.text-amber-600]="feedbackMessage().type === 'warning'">
+                {{ feedbackMessage().type === 'success' ? 'check_circle' : feedbackMessage().type === 'error' ? 'error' : feedbackMessage().type === 'warning' ? 'timer_off' : 'info' }}
+              </span>
+              <span>{{ feedbackMessage().text }}</span>
+            </p>
+          </div>
+          
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-7 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+              <div class="relative w-12 h-12 flex items-center justify-center shrink-0">
+                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                  <path class="text-slate-200 stroke-current" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3"></path>
+                  <path class="text-[#e10514] stroke-current transition-all duration-1000 ease-linear" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" [attr.stroke-dasharray]="timerDashArray" stroke-linecap="round" stroke-width="3"></path>
+                </svg>
+                <span class="material-symbols-outlined absolute text-[20px] text-[#e10514]">schedule</span>
+              </div>
+              <div class="flex flex-col">
+                <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Kalan Süre</span>
+                <div class="flex items-baseline gap-1">
+                  <span class="text-xl font-bold text-[#e10514] tracking-tight">{{ timerDisplay }}</span>
+                  <span class="text-xs text-slate-500">dakika</span>
+                </div>
+              </div>
+            </div>
+            
+            <button 
+              class="w-full sm:w-auto px-4 py-2 rounded-lg text-xs font-bold bg-white border transition-all duration-200 flex items-center justify-center gap-1.5"
+              [class.text-slate-400]="remainingSeconds() > 0"
+              [class.border-slate-200]="remainingSeconds() > 0"
+              [class.cursor-not-allowed]="remainingSeconds() > 0"
+              [class.bg-[#e10514]]="remainingSeconds() === 0"
+              [class.text-white]="remainingSeconds() === 0"
+              [class.hover:bg-[#c8102e]]="remainingSeconds() === 0"
+              [class.border-transparent]="remainingSeconds() === 0"
+              [disabled]="remainingSeconds() > 0"
+              (click)="resendOtp()"
+              type="button">
+              <span class="material-symbols-outlined text-[16px]">{{ remainingSeconds() === 0 ? 'replay' : 'done' }}</span>
+              <span>Şifreyi Tekrar Gönder</span>
+            </button>
+          </div>
+          
+          <div class="space-y-3">
+            <button 
+              class="w-full text-white font-bold py-3.5 px-8 rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2 text-base disabled:opacity-80"
+              [class.bg-[#e10514]]="!isSuccess()"
+              [class.hover:bg-[#c8102e]]="!isSuccess()"
+              [class.active:scale-[0.99]]="!isSuccess() && !isVerifying()"
+              [class.bg-emerald-600]="isSuccess()"
+              [disabled]="isVerifying() || isSuccess()"
+              (click)="verifyOtp()"
+              type="button">
+              @if (isVerifying()) {
+                <span class="material-symbols-outlined text-[20px] animate-spin">autorenew</span>
+                <span>Doğrulanıyor...</span>
+              } @else if (isSuccess()) {
+                <span class="material-symbols-outlined text-[20px]">verified</span>
+                <span>Doğrulama Başarılı!</span>
+              } @else {
+                <span class="material-symbols-outlined text-[20px]">check_circle</span>
+                <span>Şifreyi Onayla</span>
+              }
+            </button>
+            <button class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 font-semibold rounded-xl text-sm transition-colors flex items-center justify-center cursor-pointer" (click)="location.back()" type="button">
+              <span>Vazgeç</span>
+            </button>
+          </div>
+        </div>
+        
+        <div class="mt-8 pt-5 border-t border-slate-100 flex items-center justify-center text-center">
+          <a class="inline-flex items-center gap-1.5 text-xs font-bold text-[#e10514] hover:text-[#c8102e] hover:underline transition-colors" href="#">
+            <span class="material-symbols-outlined text-[17px]">phonelink_erase</span>
+            <span>Numara Bana Ait Değil / Bilgi Güncelle</span>
+          </a>
+        </div>
+      </div>
+      
+      <div class="lg:col-span-5 space-y-6">
+        <div class="bg-amber-50/70 border-l-4 border-[#e10514] rounded-2xl p-6 shadow-sm border border-amber-200/60 relative overflow-hidden">
+          <div class="flex items-start gap-3.5">
+            <div class="p-2.5 rounded-xl bg-red-100/70 text-[#e10514] shrink-0">
+              <span class="material-symbols-outlined text-[24px]">gpp_maybe</span>
+            </div>
+            <div>
+              <h2 class="text-base font-bold text-slate-900">Kritik Güvenlik Uyarısı</h2>
+              <p class="text-xs text-slate-600 mt-1">Lütfen bankacılık ve kimlik güvenliğiniz için unutmayınız:</p>
+            </div>
+          </div>
+          <div class="mt-4 p-3.5 bg-white/90 rounded-xl border border-amber-200/70 text-slate-800 text-xs font-semibold leading-relaxed shadow-xs">
+            <span class="text-[#e10514] font-bold">"Ziraat Bankası personeli dahil</span> hiç kimse sizden SMS ile gelen şifrenizi talep edemez. Şifrenizi kimseyle paylaşmayınız."
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+          <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">İşlem Detayları</span>
+            <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold flex items-center gap-1.5 border border-emerald-200/50">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              Aktif Oturum
+            </span>
+          </div>
+          <dl class="space-y-2.5 text-xs">
+            <div class="flex justify-between items-center py-1">
+              <dt class="text-slate-500 font-medium">Kanal:</dt>
+              <dd class="font-bold text-slate-800">Bireysel İnternet Şubesi</dd>
+            </div>
+            <div class="flex justify-between items-center py-1">
+              <dt class="text-slate-500 font-medium">IP Adresi:</dt>
+              <dd class="font-bold text-slate-800 flex items-center gap-1">
+                <span>88.255.***.**</span>
+                <span class="text-emerald-600 font-semibold text-[11px]">(Güvenli)</span>
+              </dd>
+            </div>
+            <div class="flex justify-between items-center py-1">
+              <dt class="text-slate-500 font-medium">Referans Kodu:</dt>
+              <dd class="font-mono font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded text-[11px]">ZR-948102</dd>
+            </div>
+            <div class="flex justify-between items-center py-1">
+              <dt class="text-slate-500 font-medium">Tarih &amp; Saat:</dt>
+              <dd class="font-semibold text-slate-800">Bugün, 14:32:10</dd>
+            </div>
+          </dl>
+        </div>
+        
+        <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 flex flex-col">
+          <div class="p-5 bg-gradient-to-r from-red-50/70 to-slate-50 flex items-center gap-3 border-b border-slate-100">
+            <div class="w-10 h-10 rounded-xl bg-[#e10514] text-white flex items-center justify-center shrink-0 shadow-sm">
+              <span class="material-symbols-outlined text-[22px]">phone_android</span>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-slate-900">Ziraat Mobil Onay</h3>
+              <p class="text-xs text-slate-500">SMS beklemek yerine anında bildirimle onaylayın.</p>
+            </div>
+          </div>
+          <div class="relative h-40 w-full overflow-hidden bg-slate-800">
+            <img alt="Ziraat Mobil Onay Görseli" class="w-full h-full object-cover opacity-85 hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJ43VtIQSmr9lvwqXVzPMByWjI3CetQb7GziyHZPRndEdiESwBZeQbtA-q0FAztVQIJJMpau9kAfb-Z2vh39x4FkClcPZ142VmNQ55IrbVB89593acjAfOEOQxpxQq9TvJfmDIgWGXXNa-gj1BFtphQm0NIObiqzBWQh6n5p90Q3irH_maFZKSb2itpVmrExYpq-ZtG_iRRzLPQLM_Ip-S9CVfHDkqfkYAXEmXkDiZWb2H5oboe2bg"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent flex items-end p-4">
+              <div class="flex items-center justify-between w-full text-white">
+                <span class="text-xs font-bold tracking-wide">Mobil Bildirim ile Hızlı Geçiş</span>
+                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

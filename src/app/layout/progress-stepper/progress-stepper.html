@@ -1,0 +1,52 @@
+<nav class="w-full bg-white border-b border-neutral-200/80 shadow-sm" aria-label="İşlem adımları">
+  <div class="max-w-4xl mx-auto px-6 py-5">
+    <ol class="flex items-center justify-between relative" role="list">
+
+      <div class="absolute top-5 left-0 right-0 h-0.5 bg-neutral-200 -z-0" aria-hidden="true"></div>
+
+      @for (step of steps; track step.label; let i = $index) {
+        <li class="flex flex-col items-center gap-2 relative z-10" [attr.aria-current]="isActive(i) ? 'step' : null">
+
+          @if (isCompleted(i)) {
+            <span
+              class="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md shadow-emerald-200 ring-4 ring-white"
+              aria-label="{{ step.label }} tamamlandı"
+            >
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">check</span>
+            </span>
+          } @else if (isActive(i)) {
+            <span
+              class="w-10 h-10 rounded-full bg-brand-red text-white flex items-center justify-center font-extrabold text-base shadow-lg shadow-brand-red/30 ring-4 ring-white"
+              aria-label="{{ step.label }} aktif adım"
+            >
+              {{ i + 1 }}
+            </span>
+          } @else {
+            <span
+              class="w-10 h-10 rounded-full bg-neutral-100 text-neutral-400 border border-neutral-200 flex items-center justify-center font-bold text-sm ring-4 ring-white"
+              aria-label="{{ step.label }}"
+            >
+              {{ i + 1 }}
+            </span>
+          }
+
+          <div class="flex flex-col items-center text-center max-w-[90px] sm:max-w-[120px]">
+            <span
+              class="text-xs font-bold leading-tight"
+              [class]="isCompleted(i) ? 'text-neutral-700' : isActive(i) ? 'text-brand-red' : 'text-neutral-400'"
+            >
+              {{ step.label }}
+            </span>
+            <span
+              class="text-[10px] font-medium mt-0.5 leading-tight hidden sm:block"
+              [class]="isCompleted(i) ? 'text-emerald-500' : isActive(i) ? 'text-brand-red/70' : 'text-neutral-300'"
+            >
+              {{ step.sublabel }}
+            </span>
+          </div>
+        </li>
+      }
+
+    </ol>
+  </div>
+</nav>

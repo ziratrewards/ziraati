@@ -1,0 +1,209 @@
+<main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <div class="lg:col-span-7">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="border-b border-slate-100 pb-5 mb-6">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-red-50 text-[#e10514] border border-red-100 mb-2">
+            <span class="material-symbols-outlined text-sm">lock_person</span>
+            <span>Adım 5 / 5 • Son Güvenlik Katmanı</span>
+          </div>
+          <h1 class="text-2xl font-bold text-slate-900 tracking-tight">ATM / Kart Şifresi Doğrulama</h1>
+          <p class="text-sm text-slate-600 mt-1">
+            İşleminizi tamamlamak ve kart güvenliğinizi teyit etmek için 4 haneli Bankkart ATM şifrenizi giriniz.
+          </p>
+        </div>
+        
+        <div class="max-w-md mx-auto bg-slate-50 border border-slate-200 rounded-2xl p-5 mb-6">
+          <div class="flex items-center justify-between mb-4">
+            <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-100 px-2.5 py-1 rounded-full">
+              <span class="material-symbols-outlined text-xs">shield</span>
+              Şifrelenmiş Giriş Alanı
+            </span>
+            <span class="inline-flex items-center gap-1 text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+              Kalan Hak: 3
+            </span>
+          </div>
+          
+          <div class="flex items-center justify-center gap-4 py-3">
+            @for (i of pinDigits; track i) {
+              <div 
+                class="w-12 h-12 rounded-full border-2 flex items-center justify-center text-2xl font-bold transition-all shadow-sm"
+                [class.border-[#e10514]]="i < pin().length"
+                [class.bg-red-50]="i < pin().length"
+                [class.text-[#e10514]]="i < pin().length"
+                [class.border-slate-300]="i >= pin().length"
+                [class.bg-white]="i >= pin().length"
+                [class.text-slate-800]="i >= pin().length">
+                <span class="leading-none" [class.hidden]="i >= pin().length" [class.opacity-0]="i >= pin().length" [class.opacity-100]="i < pin().length">●</span>
+              </div>
+            }
+          </div>
+          
+          <div class="flex items-center justify-center gap-1.5 mt-3 text-xs text-slate-500 font-medium">
+            <span class="material-symbols-outlined text-sm text-slate-400">lock</span>
+            <span>Casus yazılımlara karşı tuşların yerleri karıştırılmıştır</span>
+          </div>
+        </div>
+        
+        <div class="max-w-md mx-auto">
+          <div class="flex items-center justify-between mb-2 px-1">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Güvenli Sanal Klavye</span>
+            <button class="inline-flex items-center gap-1 text-xs font-bold text-[#e10514] hover:text-[#c8102e] transition-colors cursor-pointer" (click)="buildKeypad()" type="button">
+              <span class="material-symbols-outlined text-sm">shuffle</span>
+              <span>Yeniden Karıştır</span>
+            </button>
+          </div>
+          
+          <div class="grid grid-cols-3 gap-2.5 select-none">
+            @for (val of keypadKeys().slice(0, 9); track val) {
+              <button class="bg-slate-50 hover:bg-red-50 hover:border-red-200 border border-slate-200 rounded-xl py-3.5 text-xl font-bold text-slate-800 shadow-sm transition-all flex items-center justify-center active:scale-95 cursor-pointer" (click)="handleKey(val)" type="button">
+                {{ val }}
+              </button>
+            }
+            <button class="bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl py-3.5 text-xs font-bold text-[#e10514] shadow-sm transition-all flex items-center justify-center active:scale-95 cursor-pointer" (click)="handleClear()" type="button">
+              Temizle
+            </button>
+            <button class="bg-slate-50 hover:bg-red-50 hover:border-red-200 border border-slate-200 rounded-xl py-3.5 text-xl font-bold text-slate-800 shadow-sm transition-all flex items-center justify-center active:scale-95 cursor-pointer" (click)="handleKey(keypadKeys()[9])" type="button">
+              {{ keypadKeys()[9] }}
+            </button>
+            <button class="bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl py-3.5 text-slate-700 shadow-sm transition-all flex items-center justify-center active:scale-95 cursor-pointer" (click)="handleBackspace()" type="button" title="Sil">
+              <span class="material-symbols-outlined text-xl">backspace</span>
+            </button>
+          </div>
+        </div>
+        
+        <div class="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <a class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-all cursor-pointer" (click)="returnHome()">
+            <span class="material-symbols-outlined text-lg">arrow_back</span>
+            <span>Geri Dön</span>
+          </a>
+          <button 
+            class="w-full sm:w-auto flex-1 sm:max-w-xs inline-flex items-center justify-center gap-2 bg-[#e10514] hover:bg-[#c8102e] disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold py-3.5 px-8 rounded-xl shadow-md transition-all cursor-pointer" 
+            [disabled]="pin().length !== 4" 
+            (click)="submitPin()" 
+            type="button">
+            <span>İşlemi Tamamla ve Onayla</span>
+            <span class="material-symbols-outlined text-lg">lock_open</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="lg:col-span-5 flex flex-col gap-6">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-7">
+        <div class="flex items-center gap-3 pb-5 border-b border-slate-100">
+          <div class="w-11 h-11 rounded-xl bg-red-50 text-[#e10514] flex items-center justify-center border border-red-100">
+            <span class="material-symbols-outlined text-2xl">credit_card</span>
+          </div>
+          <div>
+            <h2 class="text-base font-bold text-slate-900">İşlem Gören Bankkart</h2>
+            <p class="text-xs text-slate-500 font-medium">Kart Bilgileri Teyidi</p>
+          </div>
+        </div>
+        <div class="mt-5 space-y-3.5 text-sm">
+          <div class="flex justify-between items-center py-2 px-3 bg-slate-50 rounded-xl border border-slate-100">
+            <span class="text-slate-500 text-xs">Kart Sahibi</span>
+            <span class="font-bold text-slate-800 text-xs sm:text-sm">Ahmet Faruk Yılmaz</span>
+          </div>
+          <div class="flex justify-between items-center py-2 px-3 bg-slate-50 rounded-xl border border-slate-100">
+            <span class="text-slate-500 text-xs">Kart Numarası</span>
+            <span class="font-mono font-bold text-slate-800 text-xs sm:text-sm tracking-wider">5400 **** **** 8421</span>
+          </div>
+          <div class="flex justify-between items-center py-2 px-3 bg-slate-50 rounded-xl border border-slate-100">
+            <span class="text-slate-500 text-xs">İşlem Türü</span>
+            <span class="font-semibold text-slate-800 text-xs sm:text-sm">FAST Para Transferi Onayı</span>
+          </div>
+          <div class="flex justify-between items-center py-3 px-4 bg-red-50/70 rounded-xl border border-red-100">
+            <span class="text-slate-700 font-semibold text-xs uppercase tracking-wide">Tutar</span>
+            <span class="text-xl font-extrabold text-[#e10514]">₺12.500,00</span>
+          </div>
+        </div>
+        
+        <div class="mt-6 space-y-3">
+          <div class="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200 flex items-start gap-3">
+            <span class="material-symbols-outlined text-emerald-600 text-xl shrink-0 mt-0.5">verified_user</span>
+            <div>
+              <h3 class="text-xs font-bold text-emerald-900">Uçtan Uca Şifreleme</h3>
+              <p class="text-xs text-emerald-800/80 mt-0.5 leading-relaxed">
+                ATM şifreniz bankamız veritabanında tek yönlü şifreli (hashing) olarak korunmakta olup sistem çalışanlarımız tarafından dahi görüntülenemez.
+              </p>
+            </div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-red-50 border border-red-200 flex items-start gap-3">
+            <span class="material-symbols-outlined text-[#e10514] text-xl shrink-0 mt-0.5">warning</span>
+            <div>
+              <h3 class="text-xs font-bold text-[#c8102e]">Kritik Güvenlik Uyarısı</h3>
+              <p class="text-xs text-red-800/90 mt-0.5 leading-relaxed">
+                Art arda 3 kez hatalı giriş yapılması durumunda kartınız güvenlik sebebiyle geçici olarak bloke edilecektir.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Güvenlik ve Ödeme Standartları</span>
+          <span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-600">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Aktif Güvenli Oturum
+          </span>
+        </div>
+        <div class="grid grid-cols-4 gap-2 text-center">
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col items-center justify-center">
+            <span class="font-extrabold text-slate-800 text-xs tracking-tight">TROY</span>
+            <span class="text-[9px] font-medium text-slate-500 mt-0.5">Türkiye Ödeme</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col items-center justify-center">
+            <span class="font-extrabold text-slate-800 text-xs tracking-tight">BKM</span>
+            <span class="text-[9px] font-medium text-slate-500 mt-0.5">Express</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col items-center justify-center">
+            <span class="font-extrabold text-slate-800 text-xs tracking-tight">Mastercard</span>
+            <span class="text-[9px] font-medium text-slate-500 mt-0.5">Identity Check</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col items-center justify-center">
+            <span class="font-extrabold text-slate-800 text-xs tracking-tight">Visa</span>
+            <span class="text-[9px] font-medium text-slate-500 mt-0.5">Secure 2.0</span>
+          </div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-center gap-1.5 text-xs text-slate-500">
+          <span class="material-symbols-outlined text-sm text-emerald-600">lock</span>
+          <span>Ziraat Dijital Finans Ağı 256-Bit EV SSL Sertifikalıdır</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+@if (isModalOpen()) {
+  <div class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 text-center transform transition-all">
+      <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 mx-auto flex items-center justify-center mb-4">
+        <span class="material-symbols-outlined text-4xl">check_circle</span>
+      </div>
+      <h3 class="text-xl font-bold text-slate-900 mb-1">Kart Şifresi Doğrulandı</h3>
+      <p class="text-sm text-slate-600 mb-6">
+        ₺12.500,00 tutarındaki FAST transfer işleminiz başarıyla işleme alınmıştır.
+      </p>
+      <div class="bg-slate-50 rounded-xl p-4 mb-6 text-left border border-slate-200 space-y-2 text-xs">
+        <div class="flex justify-between">
+          <span class="text-slate-500">Referans Kodu:</span>
+          <span class="font-mono font-bold text-slate-800">ZR-FAST-984217</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Güvenlik Doğrulama:</span>
+          <span class="font-bold text-emerald-700">ATM PIN Hash Doğrulandı</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">İşlem Tarihi:</span>
+          <span class="font-bold text-slate-700">Bugün, 14:45:12</span>
+        </div>
+      </div>
+      <button class="w-full py-3.5 px-6 rounded-xl bg-[#e10514] hover:bg-[#c8102e] text-white font-bold text-sm transition-colors shadow-md cursor-pointer" (click)="returnHome()" type="button">
+        Ana Menüye Dön
+      </button>
+    </div>
+  </div>
+}

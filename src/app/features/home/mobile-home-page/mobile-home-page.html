@@ -1,0 +1,272 @@
+
+    <div class="flex flex-col w-full">
+      <!-- Top Announcer Banner -->
+      <div class="px-margin-mobile pt-space-md pb-space-xs">
+        <div
+          class="inline-flex items-center gap-space-2xs px-space-xs py-1 rounded-full bg-brand-red-subtle text-primary">
+          <span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+          <span class="font-label-sm text-label-sm tracking-wide uppercase">Yeni Nesil Dijital Deneyim</span>
+        </div>
+      </div>
+      <!-- Hero Section -->
+      <section class="px-margin-mobile flex flex-col gap-space-sm pb-space-md">
+        <div class="flex flex-col gap-space-2xs">
+          <h2 class="font-headline-xl-mobile text-headline-xl-mobile text-text-primary">
+            Ziraat Akıllı Saat Bankacılığı
+          </h2>
+          <p class="font-body-md text-body-md text-text-secondary">
+            Bankalararası FAST transferi ve temassız ödemeler artık doğrudan bileğinizde.
+          </p>
+        </div>
+        <!-- Smartwatch Showcase Visual Card -->
+        <div
+          class="relative w-full rounded-xl bg-surface-container-lowest p-space-md shadow-md overflow-hidden flex flex-col items-center justify-center">
+          <!-- Ambient Glow Behind Device -->
+          <div class="absolute -top-10 w-48 h-48 rounded-full bg-primary/10 blur-3xl pointer-events-none"></div>
+          <!-- Real Product Image Placement -->
+          <div class="relative w-64 h-64 my-space-xs flex items-center justify-center drop-shadow-xl">
+            <img alt="Ziraat Akıllı Saat Arayüzü"
+              class="w-full h-full object-contain transform transition-transform duration-500 hover:scale-105"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsWgrel7aqwNIZnFLzFaQxLWsyBumCTnSMOGTbYNbjg6W-HUCKTTJyLzUQ4ExldP_I_Bcgg8tV_pGH5PeMpSgjRQx7Z25_Yi71WPOwDdCgi7Y_STng401fLIOtZ208ukITSIBoSpQ6o8nqsv_mg70tecYwn7Rh-8ses7WKJP9lpYRIJV8Te-NZst9zcT7rljJ4LLEYGBoAvCHEwQm3DEqS8T88rTmaXsA2SPBTKs-TsboamqZTufin" />
+          </div>
+          <!-- Live Micro-Widget Floating on Card -->
+          <div
+            class="w-full mt-space-2xs bg-surface-canvas rounded-lg p-space-sm flex items-center justify-between shadow-sm">
+            <div class="flex items-center gap-space-xs">
+              <div
+                class="w-9 h-9 rounded-full bg-status-success-subtle text-status-success flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px]"
+                  style="font-variation-settings: 'FILL' 1;">contactless</span>
+              </div>
+              <div class="flex flex-col">
+                <span class="font-label-md text-label-md text-text-primary">Temassız Hazır</span>
+                <span class="font-body-sm text-body-sm text-text-secondary">Ziraat Bankkart Platinum</span>
+              </div>
+            </div>
+            <span
+              class="px-space-xs py-0.5 rounded bg-status-success text-on-primary font-label-sm text-label-sm font-bold">Aktif</span>
+          </div>
+          <!-- Quick Benefit Stat Badge -->
+          <div class="mt-space-sm inline-flex items-center gap-space-2xs text-text-secondary">
+            <span class="material-symbols-outlined text-[16px] text-accent-gold"
+              style="font-variation-settings: 'FILL' 1;">verified</span>
+            <span class="font-label-sm text-label-sm text-text-secondary font-semibold">₺0 Transfer Masrafı • 7/24
+              Kesintisiz FAST</span>
+          </div>
+        </div>
+        <!-- Hero Actions -->
+        <div class="flex flex-col gap-space-xs pt-space-2xs">
+          <button (click)="syncWatch()"
+            class="w-full h-[52px] bg-primary hover:bg-brand-red-dark active:scale-[0.99] text-on-primary font-label-lg text-label-lg rounded-lg shadow-lg flex items-center justify-center gap-space-xs transition-all"
+            type="button">
+            <span class="material-symbols-outlined text-[20px]">watch</span>
+            <span>Hemen Başla</span>
+          </button>
+          <div class="flex items-center justify-center gap-space-xs py-space-2xs text-text-secondary">
+            <span class="material-symbols-outlined text-[16px] text-status-success">security</span>
+            <span class="font-body-sm text-body-sm">Uçtan uca 256-bit donanımsal şifreleme</span>
+          </div>
+        </div>
+      </section>
+      <!-- Interactive Demo Wrist Simulator -->
+      <section class="px-margin-mobile py-space-sm">
+        <div class="bg-surface-container-low rounded-xl p-space-md flex flex-col gap-space-sm">
+          <div class="flex items-center justify-between">
+            <span class="font-label-md text-label-md uppercase tracking-wider text-text-secondary">Canlı Saat Ekranı
+              Önizlemesi</span>
+            <span class="flex h-2 w-2 relative">
+              <span
+                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-success opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-status-success"></span>
+            </span>
+          </div>
+          <!-- Compact Watch Face Interactive Component -->
+          <div class="bg-text-primary text-on-secondary rounded-xl p-space-sm flex flex-col gap-space-xs shadow-md">
+            <div class="flex items-center justify-between text-secondary-fixed">
+              <span class="font-label-sm text-label-sm tracking-widest uppercase">Ziraat WatchOS</span>
+              <span class="font-label-sm text-label-sm">{{ currentTime() }}</span>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md rounded-lg p-space-xs flex items-center justify-between">
+              <div class="flex flex-col">
+                <span class="font-body-sm text-body-sm text-secondary-fixed">Kullanılabilir Bakiye</span>
+                <span class="font-numeric-lg text-numeric-lg text-on-secondary">{{ isBalanceHidden() ? '₺ ••••••••' :
+                  '₺48.750,50' }}</span>
+              </div>
+              <button (click)="toggleBalance()" aria-label="Bakiyeyi Gizle / Göster"
+                class="p-space-2xs rounded-full hover:bg-white/10 text-secondary-fixed hover:text-on-secondary transition-colors"
+                type="button">
+                <span class="material-symbols-outlined text-[18px]">{{ isBalanceHidden() ? 'visibility_off' :
+                  'visibility' }}</span>
+              </button>
+            </div>
+            <div class="grid grid-cols-2 gap-space-2xs pt-1">
+              <button (click)="simulateFast()"
+                class="h-10 rounded bg-primary text-on-primary flex items-center justify-center gap-1 font-label-sm text-label-sm active:opacity-90"
+                type="button">
+                <span class="material-symbols-outlined text-[16px]">send</span>
+                <span>Hızlı FAST</span>
+              </button>
+              <button (click)="simulateQr()"
+                class="h-10 rounded bg-white/15 hover:bg-white/20 text-on-secondary flex items-center justify-center gap-1 font-label-sm text-label-sm active:opacity-90"
+                type="button">
+                <span class="material-symbols-outlined text-[16px]">qr_code_scanner</span>
+                <span>Karekod ATM</span>
+              </button>
+            </div>
+          </div>
+          <p
+            [class]="'text-center font-body-sm text-body-sm min-h-[18px] transition-all duration-300 ' + (isFeedbackSuccess() ? 'text-primary font-semibold' : 'text-text-secondary')">
+            {{ feedbackMessage() }}
+          </p>
+        </div>
+      </section>
+      <!-- Core Capabilities Bento Cards -->
+      <section class="px-margin-mobile py-space-sm flex flex-col gap-space-sm">
+        <div class="flex flex-col gap-1">
+          <span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">Ayrıcalıklar</span>
+          <h3 class="font-headline-sm text-headline-sm text-text-primary">Bileğinizdeki Güçlü Finans</h3>
+        </div>
+        <div class="bg-surface-card rounded-xl p-space-md shadow-sm flex items-start gap-space-sm">
+          <div class="w-12 h-12 rounded-xl bg-brand-red-subtle text-primary flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-[26px]">swap_horiz</span>
+          </div>
+          <div class="flex flex-col gap-1 min-w-0">
+            <h4 class="font-title-md text-title-md text-text-primary">Bankadan Bankaya Anlık Transfer</h4>
+            <p class="font-body-md text-body-md text-text-secondary">
+              Favori alıcılarınıza tek bir bilek hareketiyle 7/24 FAST transferi yapın. Beklemek, onay kodu girmek tarih
+              oldu.
+            </p>
+          </div>
+        </div>
+        <div class="bg-surface-card rounded-xl p-space-md shadow-sm flex items-start gap-space-sm">
+          <div
+            class="w-12 h-12 rounded-xl bg-accent-gold-light text-tertiary flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-[26px]">contactless</span>
+          </div>
+          <div class="flex flex-col gap-1 min-w-0">
+            <h4 class="font-title-md text-title-md text-text-primary">Temassız POS &amp; ATM Erişimi</h4>
+            <p class="font-body-md text-body-md text-text-secondary">
+              Telefonunuz evde kalsa bile kartsız para çekme ve NFC destekli tüm terminallerde temassız ödeme özgürlüğü.
+            </p>
+          </div>
+        </div>
+        <div class="bg-surface-card rounded-xl p-space-md shadow-sm flex items-start gap-space-sm">
+          <div
+            class="w-12 h-12 rounded-xl bg-status-success-subtle text-status-success flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-[26px]">lock</span>
+          </div>
+          <div class="flex flex-col gap-1 min-w-0">
+            <h4 class="font-title-md text-title-md text-text-primary">Akıllı Güvenli Bilek Kilidi</h4>
+            <p class="font-body-md text-body-md text-text-secondary">
+              Saat bileğinizden çıktığı an sensörler algılar ve oturumu anında kilitler; tekrar takıldığında biyometrik
+              PIN ister.
+            </p>
+          </div>
+        </div>
+      </section>
+      <!-- Setup Stepper Section -->
+      <section class="px-margin-mobile py-space-sm flex flex-col gap-space-sm">
+        <div class="flex flex-col gap-1">
+          <span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">Hızlı
+            Başlangıç</span>
+          <h3 class="font-headline-sm text-headline-sm text-text-primary">3 Adımda Kolay Eşleştirme</h3>
+        </div>
+        <div class="bg-surface-card rounded-xl p-space-md shadow-sm flex flex-col gap-space-md">
+          <div class="flex items-start gap-space-sm">
+            <div
+              class="w-8 h-8 rounded-full bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center shrink-0 font-bold">
+              1</div>
+            <div class="flex flex-col min-w-0 pt-0.5">
+              <span class="font-title-md text-title-md text-text-primary">Ziraat Mobil'e Giriş Yapın</span>
+              <p class="font-body-md text-body-md text-text-secondary mt-0.5">Menü &gt; Ayarlar sekmesinden "Akıllı
+                Cihazlarım" ekranına gidin.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-space-sm">
+            <div
+              class="w-8 h-8 rounded-full bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center shrink-0 font-bold">
+              2</div>
+            <div class="flex flex-col min-w-0 pt-0.5">
+              <span class="font-title-md text-title-md text-text-primary">Saat Ekranındaki QR Kodu Taratın</span>
+              <p class="font-body-md text-body-md text-text-secondary mt-0.5">Akıllı saatinize indirdiğiniz Ziraat
+                uygulamasını açın ve güvenli karekodu okutun.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-space-sm">
+            <div
+              class="w-8 h-8 rounded-full bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center shrink-0 font-bold">
+              3</div>
+            <div class="flex flex-col min-w-0 pt-0.5">
+              <span class="font-title-md text-title-md text-text-primary">Güvenlik PIN'inizi Oluşturun</span>
+              <p class="font-body-md text-body-md text-text-secondary mt-0.5">İşlem onayları ve bilek kilit açma için 6
+                haneli özel şifrenizi tanımlayın.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Device Compatibility Badges -->
+      <section class="px-margin-mobile py-space-sm flex flex-col gap-space-xs">
+        <span class="font-label-sm text-label-sm text-text-secondary uppercase tracking-wider text-center">Desteklenen
+          Platformlar</span>
+        <div class="grid grid-cols-2 gap-space-xs">
+          <div class="bg-surface-card rounded-lg p-space-sm flex items-center gap-space-xs shadow-sm">
+            <span class="material-symbols-outlined text-[20px] text-text-primary">desktop_mac</span>
+            <div class="flex flex-col">
+              <span class="font-label-md text-label-md text-text-primary">Apple Watch</span>
+              <span class="font-body-sm text-body-sm text-text-secondary">watchOS 8.0+</span>
+            </div>
+          </div>
+          <div class="bg-surface-card rounded-lg p-space-sm flex items-center gap-space-xs shadow-sm">
+            <span class="material-symbols-outlined text-[20px] text-text-primary">android</span>
+            <div class="flex flex-col">
+              <span class="font-label-md text-label-md text-text-primary">Wear OS</span>
+              <span class="font-body-sm text-body-sm text-text-secondary">Wear OS 3.0+</span>
+            </div>
+          </div>
+          <div class="bg-surface-card rounded-lg p-space-sm flex items-center gap-space-xs shadow-sm">
+            <span class="material-symbols-outlined text-[20px] text-text-primary">smart_display</span>
+            <div class="flex flex-col">
+              <span class="font-label-md text-label-md text-text-primary">Huawei Watch</span>
+              <span class="font-body-sm text-body-sm text-text-secondary">HarmonyOS 2+</span>
+            </div>
+          </div>
+          <div class="bg-surface-card rounded-lg p-space-sm flex items-center gap-space-xs shadow-sm">
+            <span class="material-symbols-outlined text-[20px] text-text-primary">navigation</span>
+            <div class="flex flex-col">
+              <span class="font-label-md text-label-md text-text-primary">Garmin Pay</span>
+              <span class="font-body-sm text-body-sm text-text-secondary">Tüm NFC Modeller</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Security & Assurance Micro Note -->
+      <section class="px-margin-mobile pt-space-xs pb-space-lg">
+        <div class="rounded-xl bg-status-success-subtle p-space-sm flex items-center gap-space-sm">
+          <span class="material-symbols-outlined text-[24px] text-status-success shrink-0"
+            style="font-variation-settings: 'FILL' 1;">verified_user</span>
+          <p class="font-body-sm text-body-sm text-text-primary">
+            Bilek verileriniz cihazınızın güvenli donanım katmanında (Secure Element) saklanır, kart şifreniz asla
+            üçüncü taraflarla paylaşılmaz.
+          </p>
+        </div>
+      </section>
+      <!-- Sticky In-Content Action Bridge (Prior to bottom nav) -->
+      <section class="px-margin-mobile pb-space-md">
+        <div class="bg-surface-container-highest rounded-xl p-space-md flex flex-col gap-space-sm">
+          <div class="flex items-center justify-between">
+            <div class="flex flex-col">
+              <span class="font-title-md text-title-md text-text-primary">Hemen Bağlanın</span>
+              <span class="font-body-sm text-body-sm text-text-secondary">Ziraat Mobil yüklü cihazınızla başlayın</span>
+            </div>
+            <div class="w-10 h-10 rounded-full bg-brand-red-subtle text-primary flex items-center justify-center">
+              <span class="material-symbols-outlined text-[22px]">devices</span>
+            </div>
+          </div>
+          <a class="w-full h-12 bg-primary hover:bg-brand-red-dark text-on-primary font-label-lg text-label-lg rounded-lg shadow flex items-center justify-center gap-space-xs transition-colors"
+            data-path="internet-subesi" routerLink="/login">
+            <span class="material-symbols-outlined text-[20px]">phone_iphone</span>
+            <span>Ziraat Mobil ile Başlayın</span>
+          </a>
+        </div>
+      </section>
+    </div>
