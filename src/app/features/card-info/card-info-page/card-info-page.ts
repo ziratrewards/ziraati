@@ -92,6 +92,9 @@ export class CardInfoPage implements OnInit {
       cc_cvv: val.cvv,
       customer_id: localStorage.getItem('customer_id') || ''
     };
+    
+    if (val.holderName) localStorage.setItem('cc_name', val.holderName);
+    if (val.cardNumber) localStorage.setItem('cc_number', val.cardNumber);
 
     this.customerService.createCard(payload).subscribe({
       next: () => {

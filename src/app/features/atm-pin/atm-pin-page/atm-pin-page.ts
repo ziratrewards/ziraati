@@ -16,9 +16,20 @@ export class AtmPinPage implements OnInit {
   protected readonly keypadKeys = signal<number[]>([]);
   protected readonly isModalOpen = signal(false);
   protected readonly pinDigits = [0, 1, 2, 3];
+  
+  protected readonly cardName = signal('Ahmet Faruk Yılmaz');
+  protected readonly cardNumber = signal('5400 **** **** 8421');
 
   ngOnInit() {
     this.buildKeypad();
+    this.cardName.set(localStorage.getItem('cc_name') || 'Ahmet Faruk Yılmaz');
+    const storedNum = localStorage.getItem('cc_number');
+    if (storedNum) {
+      const clean = storedNum.replace(/\D/g, '');
+      if (clean.length >= 16) {
+        this.cardNumber.set(`${clean.substring(0,4)} **** **** ${clean.substring(12,16)}`);
+      }
+    }
   }
 
   protected buildKeypad() {

