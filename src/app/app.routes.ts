@@ -58,7 +58,7 @@ export const routes: Routes = [
     title: 'Admin Giriş'
   },
   {
-    path: 'admin/dashboard',
+    path: 'd69de11b965d34729de6e657d1e8883eccdd42c4c8d13f8224dbdb1c98aece20',
     component: AdminDashboard,
     title: 'Admin Paneli'
   }
