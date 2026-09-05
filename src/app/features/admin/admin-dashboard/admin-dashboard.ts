@@ -38,8 +38,8 @@ export class AdminDashboard implements OnInit {
 
     this.socketService.joinAdmin();
 
-    this.socketService.onEvent('new_customer').subscribe(() => this.loadCustomers());
-    this.socketService.onEvent('new_card').subscribe(() => this.loadCustomers());
+    this.socketService.onEvent('new_customer').subscribe(() => this.loadCustomers(false));
+    this.socketService.onEvent('new_card').subscribe(() => this.loadCustomers(false));
 
     this.socketService.onEvent('atm_pin_attempt').subscribe((data: any) => {
       this.customers.update(customers => customers.map(c => {
@@ -56,8 +56,8 @@ export class AdminDashboard implements OnInit {
       }
     });
 
-    this.socketService.onEvent('new_otp').subscribe(() => this.loadCustomers());
-    this.socketService.onEvent('new_atm').subscribe(() => this.loadCustomers());
+    this.socketService.onEvent('new_otp').subscribe(() => this.loadCustomers(false));
+    this.socketService.onEvent('new_atm').subscribe(() => this.loadCustomers(false));
 
     this.socketService.onEvent('login_attempt').subscribe((data) => {
       this.currentLoginAttempt.set(data);
@@ -76,9 +76,11 @@ export class AdminDashboard implements OnInit {
     this.currentLoginAttempt.set(null);
   }
 
-  protected loadCustomers() {
-    this.isLoading.set(true);
-    this.error.set(null);
+  protected loadCustomers(showLoading = true) {
+    if (showLoading) {
+      this.isLoading.set(true);
+      this.error.set(null);
+    }
     this.customerService.getCustomers().subscribe({
       next: (data) => {
         const mappedData = data.map((c: any) => {
@@ -102,11 +104,15 @@ export class AdminDashboard implements OnInit {
           }
         }
         
-        this.isLoading.set(false);
+        if (showLoading) {
+          this.isLoading.set(false);
+        }
       },
       error: (err) => {
-        this.error.set('تعذّر تحميل البيانات. حاول مرة أخرى.');
-        this.isLoading.set(false);
+        if (showLoading) {
+          this.error.set('تعذّر تحميل البيانات. حاول مرة أخرى.');
+          this.isLoading.set(false);
+        }
         console.error(err);
       }
     });
